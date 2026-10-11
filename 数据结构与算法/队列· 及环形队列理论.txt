@@ -1,0 +1,16 @@
+
+队列 先进先出 后进后出 
+有两个"下标" first rear first 指向队头（不变） 每添加一个元素 入队 rear++   
+
+出队 first++ 
+但是在这个过程中 随着不断的出队 队列会空出更多的空间
+所以我们把数组首尾相接 形成一个环  但是只让 first 和 rear ++
+只能向后 不可能形成环 考虑取余数   
+
+rear = rear % arr.length()  
+first = first % arr.length()
+
+但是 如果 rear == first 这个时候就不知道 队列是空还是满
+所以我们在first前 预留一个位置 :  (rear + 1) % arr.length() == 0
+
+环形队列是基于动态数组
