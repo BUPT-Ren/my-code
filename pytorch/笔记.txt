@@ -1,0 +1,16 @@
+
+Dataset-->Dataloader
+
+Dataloader:为网络提供不同的数据形式
+
+提供一种方式去获取数据及label
+如何获取每一个数据及其label
+有多少条数据
+
+
+tenesorboard:
+
+
+
+dataloader:  如何从数据集中取数据
+
