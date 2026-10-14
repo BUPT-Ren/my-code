@@ -1,0 +1,80 @@
+<view class="page">
+  <view class="header">
+    <view class="header-left" bindtap="goBack">
+      <text class="back-icon">‹</text>
+    </view>
+    <text class="header-title">我的收藏</text>
+    <view class="header-right"></view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <view wx:elif="{{favorites.length === 0}}" class="empty-state">
+    <text class="empty-icon">📚</text>
+    <text class="empty-text">还没有收藏任何图书</text>
+    <view class="empty-action" bindtap="goBack">
+      <text>去发现好书</text>
+    </view>
+  </view>
+
+  <view wx:else class="favorites-list">
+    <view class="count-bar">
+      <text>共 {{favorites.length}} 本收藏</text>
+    </view>
+
+    <view 
+      wx:for="{{favorites}}" 
+      wx:key="book_id" 
+      class="fav-item"
+    >
+      <view class="fav-cover" bindtap="onBookTap" data-id="{{item.book_id}}">
+        <image 
+          wx:if="{{item.cover_url}}" 
+          src="{{item.cover_url}}" 
+          mode="aspectFill"
+          class="cover-image"
+        />
+        <view wx:else class="cover-color" style="background: {{item.coverColor}};">
+          <text class="cover-emoji">📕</text>
+        </view>
+      </view>
+      
+      <view class="fav-info" bindtap="onBookTap" data-id="{{item.book_id}}">
+        <text class="fav-title">{{item.title}}</text>
+        <text class="fav-author">{{item.author || '未知作者'}}</text>
+        <view class="fav-meta">
+          <text class="meta-item" wx:if="{{item.isbn}}">ISBN: {{item.isbn}}</text>
+        </view>
+        <view class="fav-status">
+          <view class="status-tag {{item.available > 0 ? 'available' : 'unavailable'}}">
+            <text>{{item.available > 0 ? '可借阅' : '已借完'}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="fav-actions">
+        <view 
+          class="action-btn borrow-btn {{item.available > 0 ? '' : 'disabled'}}" 
+          bindtap="onBorrow" 
+          data-id="{{item.book_id}}"
+          data-available="{{item.available > 0}}"
+        >
+          <text class="btn-icon">📖</text>
+          <text class="btn-text">借阅</text>
+        </view>
+        <view 
+          class="action-btn cancel-btn" 
+          bindtap="onCancelFavorite" 
+          data-id="{{item.book_id}}"
+          data-title="{{item.title}}"
+        >
+          <text class="btn-icon">💔</text>
+          <text class="btn-text">取消</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

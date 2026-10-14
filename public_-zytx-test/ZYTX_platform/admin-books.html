@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书管理 - 智阅同行管理后台</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <span>智阅同行 · 管理后台</span>
+            </div>
+            <div class="nav-right">
+                <div class="user-profile" id="user-profile">
+                    <div class="user-avatar" id="admin-avatar">AD</div>
+                    <span id="admin-name">管理员</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="user-info">
+                            <div class="name" id="dropdown-name">管理员</div>
+                            <div class="phone" id="dropdown-phone"></div>
+                            <div class="admin-badge"><i class="fas fa-shield-alt"></i> 管理员</div>
+                        </div>
+<a href="index.html" class="dropdown-item"><i class="fas fa-home"></i><span>返回用户端</span></a>
+                         <a href="#" class="dropdown-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>退出登录</span></a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-toggle" id="sidebar-toggle"><i class="fas fa-bars"></i></div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item"><a href="admin.html" class="menu-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text">仪表盘</span></a></li>
+                <li class="menu-item"><a href="admin-requests.html" class="menu-link"><i class="fas fa-clipboard-list"></i><span class="menu-text">审核</span></a></li>
+                <li class="menu-item"><a href="admin-books.html" class="menu-link active"><i class="fas fa-book"></i><span class="menu-text">图书管理</span></a></li>
+                <li class="menu-item"><a href="admin-users.html" class="menu-link"><i class="fas fa-users"></i><span class="menu-text">用户管理</span></a></li>
+                <li class="menu-item"><a href="admin-activities.html" class="menu-link"><i class="fas fa-calendar-alt"></i><span class="menu-text">活动管理</span></a></li>
+                <li class="menu-item"><a href="admin-notifications.html" class="menu-link"><i class="fas fa-bell"></i><span class="menu-text">通知管理</span></a></li>
+                <li class="menu-item"><a href="admin-stats.html" class="menu-link"><i class="fas fa-chart-bar"></i><span class="menu-text">数据统计</span></a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content admin-main">
+            <div class="page-header">
+                <h1>图书管理</h1>
+                <p>管理系统中的图书信息</p>
+            </div>
+
+            <div class="filter-bar">
+                <div class="filter-group search-group">
+                    <label>搜索</label>
+                    <input type="text" id="search-input" placeholder="搜索书名、作者或ISBN...">
+                </div>
+                <div class="filter-group">
+                    <label>分类</label>
+                    <select id="filter-genre">
+                        <option value="">全部分类</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>状态</label>
+                    <select id="filter-status">
+                        <option value="">全部状态</option>
+                        <option value="available">可借阅</option>
+                        <option value="unavailable">已借完</option>
+                    </select>
+                </div>
+                <button class="btn-filter" onclick="loadBooks()">
+                    <i class="fas fa-search"></i> 搜索
+                </button>
+                <button class="btn-add" onclick="showAddModal()">
+                    <i class="fas fa-plus"></i> 新增图书
+                </button>
+                <button class="btn-export-small" onclick="exportBooks()">
+                    <i class="fas fa-download"></i> 导出CSV
+                </button>
+                <button class="btn-import" onclick="showImportModal()">
+                    <i class="fas fa-upload"></i> 批量导入
+                </button>
+            </div>
+
+            <div class="batch-action-bar" id="batch-action-bar" style="display: none;">
+                <label class="select-all">
+                    <input type="checkbox" id="select-all" onchange="toggleSelectAll(this.checked)">
+                    <span>全选当前页</span>
+                </label>
+                <span class="selected-count">已选择 <strong id="selected-count">0</strong> 项<span id="total-info"></span></span>
+                <button class="btn-select-all-filtered" id="select-all-btn" onclick="selectAllFiltered()">选择全部</button>
+                <div class="batch-actions">
+                    <button class="btn-batch btn-batch-stock" onclick="showBatchStockModal()">
+                        <i class="fas fa-boxes"></i> 批量调整库存
+                    </button>
+                    <button class="btn-batch btn-batch-reject" onclick="batchDeleteBooks()">
+                        <i class="fas fa-trash"></i> 批量删除
+                    </button>
+                </div>
+            </div>
+
+            <div class="books-table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="col-checkbox">
+                                <input type="checkbox" id="select-all-header" onchange="toggleSelectAll(this.checked)">
+                            </th>
+                            <th class="col-cover">封面</th>
+                            <th class="col-title">书名</th>
+                            <th class="col-author">作者</th>
+                            <th class="col-isbn">ISBN</th>
+                            <th class="col-genre">分类</th>
+                            <th class="col-stock">库存</th>
+                            <th class="col-status">状态</th>
+                            <th class="col-actions">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="books-list">
+                        <tr><td colspan="9" class="loading-cell"><i class="fas fa-spinner fa-spin"></i> 加载中...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination" id="pagination"></div>
+        </main>
+    </div>
+
+    <!-- 新增/编辑图书弹窗 -->
+    <div class="modal-overlay" id="modal-book">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3 id="modal-book-title"><i class="fas fa-plus"></i> 新增图书</h3>
+                <span class="close-modal" onclick="closeModal('modal-book')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="book-form">
+                    <input type="hidden" id="book-id">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>ISBN <span class="required">*</span></label>
+                            <input type="text" id="book-isbn" required>
+                        </div>
+                        <div class="form-group">
+                            <label>书名 <span class="required">*</span></label>
+                            <input type="text" id="book-title" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>作者</label>
+                            <input type="text" id="book-author">
+                        </div>
+                        <div class="form-group">
+                            <label>出版日期</label>
+                            <input type="date" id="book-publish-date">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>总库存 <span class="required">*</span></label>
+                            <input type="number" id="book-total-copies" min="0" value="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>封面URL</label>
+                            <input type="text" id="book-cover-url" placeholder="https://...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>分类</label>
+                        <div class="genre-tags" id="genre-tags">
+                            <span class="genre-tag" data-genre="文学" onclick="toggleGenre(this)">文学</span>
+                            <span class="genre-tag" data-genre="小说" onclick="toggleGenre(this)">小说</span>
+                            <span class="genre-tag" data-genre="科幻" onclick="toggleGenre(this)">科幻</span>
+                            <span class="genre-tag" data-genre="历史" onclick="toggleGenre(this)">历史</span>
+                            <span class="genre-tag" data-genre="哲学" onclick="toggleGenre(this)">哲学</span>
+                            <span class="genre-tag" data-genre="科技" onclick="toggleGenre(this)">科技</span>
+                            <span class="genre-tag" data-genre="艺术" onclick="toggleGenre(this)">艺术</span>
+                            <span class="genre-tag" data-genre="经济" onclick="toggleGenre(this)">经济</span>
+                            <span class="genre-tag" data-genre="管理" onclick="toggleGenre(this)">管理</span>
+                            <span class="genre-tag" data-genre="教育" onclick="toggleGenre(this)">教育</span>
+                        </div>
+                        <input type="hidden" id="book-genres" value="[]">
+                    </div>
+                    <div class="form-group">
+                        <label>简介</label>
+                        <textarea id="book-introduction" rows="3" placeholder="请输入图书简介..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>豆瓣链接</label>
+                            <input type="text" id="book-douban-link" placeholder="https://book.douban.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label>视频链接</label>
+                            <input type="text" id="book-video-link" placeholder="https://...">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-book')">取消</button>
+                <button class="btn-confirm" onclick="saveBook()"><i class="fas fa-save"></i> 保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认弹窗 -->
+    <div class="modal-overlay" id="modal-delete">
+        <div class="modal-box">
+            <div class="modal-header warning-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> 确认删除</h3>
+                <span class="close-modal" onclick="closeModal('modal-delete')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>确定要删除图书 "<strong id="delete-book-title"></strong>" 吗？</p>
+                <p class="warning-text">此操作不可恢复！</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-delete')">取消</button>
+                <button class="btn-danger" onclick="confirmDelete()"><i class="fas fa-trash"></i> 确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量调整库存弹窗 -->
+    <div class="modal-overlay" id="modal-batch-stock">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fas fa-boxes"></i> 批量调整库存</h3>
+                <span class="close-modal" onclick="closeModal('modal-batch-stock')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>已选择 <strong id="batch-stock-count">0</strong> 本图书</p>
+                <div class="form-row" style="margin-top: 15px;">
+                    <div class="form-group">
+                        <label>操作类型</label>
+                        <select id="batch-stock-operation">
+                            <option value="add">增加库存</option>
+                            <option value="subtract">减少库存</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>数量</label>
+                        <input type="number" id="batch-stock-amount" min="1" value="1">
+                    </div>
+                </div>
+                <p class="hint-text" id="batch-stock-hint" style="margin-top: 10px; color: #666; font-size: 13px;"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-batch-stock')">取消</button>
+                <button class="btn-confirm" onclick="confirmBatchStock()"><i class="fas fa-check"></i> 确认调整</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量导入弹窗 -->
+    <div class="modal-overlay" id="modal-import">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-upload"></i> 批量导入图书</h3>
+                <span class="close-modal" onclick="closeModal('modal-import')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="import-steps">
+                    <div class="import-step" id="import-step-1">
+                        <div class="step-title">第一步：选择文件</div>
+                        <div class="file-upload-area" id="file-drop-zone">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>拖拽文件到此处，或点击选择文件</p>
+                            <p class="file-types">支持 CSV、JSON、Excel (.xlsx/.xls) 格式</p>
+                            <input type="file" id="import-file" accept=".csv,.json,.xlsx,.xls" hidden>
+                        </div>
+                        <div class="import-actions">
+                            <a href="javascript:void(0)" class="download-template-link" onclick="downloadImportTemplate()">
+                                <i class="fas fa-download"></i> 下载导入模板
+                            </a>
+                        </div>
+                    </div>
+                    <div class="import-step" id="import-step-2" style="display: none;">
+                        <div class="step-title">第二步：预览数据</div>
+                        <div class="preview-summary">
+                            <span class="new-count"><i class="fas fa-plus-circle"></i> 新增: <strong id="preview-new">0</strong></span>
+                            <span class="update-count"><i class="fas fa-sync-alt"></i> 更新: <strong id="preview-update">0</strong></span>
+                            <span class="invalid-count"><i class="fas fa-exclamation-circle"></i> 无效: <strong id="preview-invalid">0</strong></span>
+                        </div>
+                        <p class="preview-hint">更新的图书默认不更新库存，如需更新请勾选对应行的"更新库存"</p>
+                        <div class="preview-table-container">
+                            <table class="preview-table" id="preview-table">
+                                <thead>
+                                    <tr>
+                                        <th>行</th>
+                                        <th>ISBN</th>
+                                        <th>书名</th>
+                                        <th>作者</th>
+                                        <th>简介</th>
+                                        <th>分类</th>
+                                        <th>库存</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="preview-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="import-step" id="import-step-3" style="display: none;">
+                        <div class="step-title">导入结果</div>
+                        <div class="import-result">
+                            <i class="fas fa-check-circle success-icon"></i>
+                            <p id="import-result-text">新增 0 本，更新 0 本</p>
+                            <p>新增: <strong id="import-success-count">0</strong> 本，更新: <strong id="import-updated-count">0</strong> 本</p>
+                            <p id="import-skip-info"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-import')">关闭</button>
+                <button class="btn-confirm" id="btn-import-preview" style="display: none;" onclick="executeImport()">
+                    <i class="fas fa-upload"></i> 确认导入
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/admin-books.js"></script>
+</body>
+
+</html>

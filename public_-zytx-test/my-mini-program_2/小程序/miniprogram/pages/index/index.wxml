@@ -1,0 +1,31 @@
+<!-- 顶部banner -->
+<view class="banner">
+  <image src="/images/banner.jpg" mode="widthFix"></image>
+</view>
+
+<!-- 搜索栏 -->
+<view class="search-bar">
+  <input placeholder="搜索活动名称、分类" />
+</view>
+
+<!-- 分类标签 -->
+<view class="tabs">
+  <view class="tab active">全部</view>
+  <view class="tab">讲座</view>
+  <view class="tab">展览</view>
+  <view class="tab">会议</view>
+  <view class="tab">其他</view>
+</view>
+
+<!-- 活动列表 -->
+<view class="activity-list">
+  <view class="activity-item" wx:for="{{activityList}}" wx:key="id">
+    <image class="item-img" src="{{item.img}}" mode="widthFix"></image>
+    <view class="item-info">
+      <view class="item-title">{{item.title}}</view>
+      <view class="item-desc">{{item.desc}}</view>
+      <view class="item-count">{{item.count}}人已报名</view>
+    </view>
+    <button class="item-btn" bindtap="handleSignUp">报名</button>
+  </view>
+</view>

@@ -1,0 +1,86 @@
+.main-content {
+    margin-left: 0;
+    padding: 2rem;
+}
+.stats-main {
+    padding: 2rem;
+}
+
+.stats-header h2 {
+    font-size: 1.8rem;
+    color: var(--primary-blue);
+    margin-bottom: 0.3rem;
+}
+
+.stats-header p {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.stats-cards {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: white;
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-icon {
+    font-size: 2.2rem;
+    color: var(--accent-blue);
+    background: var(--light-gray);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.2rem;
+    color: var(--primary-blue);
+}
+
+.stat-info p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* 图表区域 */
+.charts-section {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.chart-card {
+    flex: 1;
+    min-width: 300px;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.chart-card h3 {
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+}

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动详情 - 智阅同行</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/activities.css">
+    <style>
+        .activity-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .activity-header {
+            margin-bottom: 2rem;
+        }
+        .activity-header .cover-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+        .activity-header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .activity-header .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .activity-header .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+        }
+        .activity-header .meta-item i {
+            color: var(--accent-blue);
+            font-size: 1.25rem;
+            width: 24px;
+        }
+        .activity-header .meta-item .label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .activity-header .meta-item .value {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        .activity-description {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .activity-description h2 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .activity-description .content {
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        .activity-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 1.5rem;
+        }
+        .activity-gallery img {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .activity-gallery img:hover {
+            transform: scale(1.05);
+        }
+        .register-section {
+            background: linear-gradient(135deg, var(--accent-blue), #667eea);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        .register-section h3 {
+            margin-bottom: 0.5rem;
+        }
+        .register-section p {
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        .register-section .btn-register {
+            padding: 12px 32px;
+            font-size: 1rem;
+            background: white;
+            color: var(--accent-blue);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .register-section .btn-register:hover {
+            transform: scale(1.05);
+        }
+        .register-section .btn-register:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .register-section .registration-status {
+            margin-top: 1rem;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 14px;
+        }
+.registration-status.pending { background: #FEF3C7; color: #D97706; }
+         .registration-status.approved { background: #D1FAE5; color: #059669; }
+         .registration-status.rejected { background: #FEE2E2; color: #DC2626; }
+         .registration-status.cancelled { background: #F3F4F6; color: #6B7280; }
+         .registration-note {
+             font-size: 14px;
+             opacity: 0.85;
+             margin-bottom: 1rem;
+             padding: 8px 16px;
+             background: rgba(255,255,255,0.15);
+             border-radius: 8px;
+         }
+         .btn-cancel-register {
+             background: rgba(255,255,255,0.2);
+             color: white;
+             border: 1px solid rgba(255,255,255,0.3);
+             padding: 10px 24px;
+             border-radius: 8px;
+             cursor: pointer;
+             margin-top: 12px;
+             font-size: 14px;
+             transition: all 0.2s;
+         }
+         .btn-cancel-register:hover {
+             background: rgba(255,255,255,0.3);
+         }
+.summary-section {
+             background: white;
+             padding: 1.5rem;
+             border-radius: 12px;
+             margin-bottom: 2rem;
+             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+         }
+         .summary-section h2 {
+             font-size: 1.1rem;
+             margin-bottom: 1rem;
+             color: var(--text-primary);
+             display: flex;
+             align-items: center;
+             gap: 8px;
+         }
+         .summary-section .summary-content {
+             line-height: 1.8;
+             color: var(--text-secondary);
+         }
+         .summary-actions {
+             margin-top: 1.5rem;
+             padding-top: 1rem;
+             border-top: 1px solid var(--border-color);
+         }
+         .like-summary-btn {
+             display: inline-flex;
+             align-items: center;
+             gap: 8px;
+             padding: 10px 20px;
+             background: var(--bg-secondary);
+             border: 1px solid var(--border-color);
+             border-radius: 20px;
+             cursor: pointer;
+             font-size: 14px;
+             color: var(--text-secondary);
+             transition: all 0.2s;
+         }
+         .like-summary-btn:hover {
+             background: #FEE2E2;
+             border-color: #EF4444;
+             color: #EF4444;
+         }
+         .like-summary-btn.liked {
+             background: #FEE2E2;
+             color: #EF4444;
+             border-color: #EF4444;
+         }
+         .like-summary-btn i {
+             font-size: 16px;
+             transition: transform 0.2s;
+         }
+.like-summary-btn.liked i {
+              transform: scale(1.2);
+          }
+          .participants-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .participants-section h2 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .participants-section h2 i {
+            color: var(--accent-blue);
+        }
+        .participants-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .participants-stats .stat-item {
+            text-align: center;
+        }
+        .participants-stats .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+        }
+        .participants-stats .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .participants-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .participant-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .participant-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            overflow: hidden;
+        }
+        .participant-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .participant-status {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+        .participant-status.pending {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+        .participant-status.approved {
+            background: #DBEAFE;
+            color: #2563EB;
+        }
+        .participant-status.checked-in {
+            background: #D1FAE5;
+            color: #059669;
+        }
+        .participant-status.not-checked-in {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+        .participant-status.rejected {
+            background: #F3F4F6;
+            color: #6B7280;
+        }
+        .load-more-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .load-more-btn:hover {
+            background: var(--border-color);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <span>智阅同行</span>
+            </div>
+            <div class="nav-right">
+                <a href="notifications.html" class="nav-icon">
+                    <i class="fas fa-bell"></i>
+                </a>
+                <a href="settings.html" class="nav-icon">
+                    <i class="fas fa-cog"></i>
+                </a>
+                <div class="user-profile" id="user-profile">
+                    <div class="user-avatar" id="nav-user-avatar">U</div>
+                    <span id="nav-user-name">用户</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="user-info">
+                            <div class="name" id="dropdown-user-name">用户</div>
+                            <div class="phone" id="dropdown-user-phone"></div>
+                        </div>
+                        <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i><span>个人资料</span></a>
+                        <a href="favorites.html" class="dropdown-item"><i class="fas fa-heart"></i><span>我的收藏</span></a>
+                        <a href="history.html" class="dropdown-item"><i class="fas fa-history"></i><span>借阅历史</span></a>
+                        <a href="settings.html" class="dropdown-item"><i class="fas fa-cog"></i><span>偏好设置</span></a>
+                        <a href="admin.html" class="dropdown-item" id="admin-entry" style="display: none;"><i class="fas fa-shield-alt"></i><span>管理后台</span></a>
+                        <a href="#" class="dropdown-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>退出登录</span></a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="index.html" class="menu-link">
+                        <i class="fas fa-home"></i>
+                        <span class="menu-text">首页</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="favorites.html" class="menu-link">
+                        <i class="fas fa-bookmark"></i>
+                        <span class="menu-text">收藏的书籍</span>
+                        <span class="badge" data-type="favorites">0</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="history.html" class="menu-link">
+                        <i class="fas fa-history"></i>
+                        <span class="menu-text">借阅历史</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="borrowed.html" class="menu-link">
+                        <i class="fas fa-book"></i>
+                        <span class="menu-text">借阅及申请</span>
+                        <span class="badge" data-type="borrowed">0</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="activities.html" class="menu-link active">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="menu-text">活动</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="recommend.html" class="menu-link">
+                        <i class="fas fa-robot"></i>
+                        <span class="menu-text">AI推荐</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="stats.html" class="menu-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span class="menu-text">阅读统计</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="activity-detail-container" id="activity-detail">
+                <div class="loading-placeholder">
+                    <i class="fas fa-spinner fa-spin"></i> 加载中...
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/activity-detail.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户管理 - 智阅同行管理后台</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <span>智阅同行 · 管理后台</span>
+            </div>
+<div class="nav-right">
+                <a href="settings.html" class="nav-icon"><i class="fas fa-cog"></i></a>
+                <div class="user-profile" id="user-profile">
+                    <div class="user-avatar" id="admin-avatar">AD</div>
+                    <span id="admin-name">管理员</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="user-info">
+                            <div class="name" id="dropdown-name">管理员</div>
+                            <div class="phone" id="dropdown-phone"></div>
+                            <div class="admin-badge"><i class="fas fa-shield-alt"></i> 管理员</div>
+                        </div>
+<a href="index.html" class="dropdown-item"><i class="fas fa-home"></i><span>返回用户端</span></a>
+                         <a href="#" class="dropdown-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>退出登录</span></a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-toggle" id="sidebar-toggle"><i class="fas fa-bars"></i></div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item"><a href="admin.html" class="menu-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text">仪表盘</span></a></li>
+                <li class="menu-item"><a href="admin-requests.html" class="menu-link"><i class="fas fa-clipboard-list"></i><span class="menu-text">审核</span></a></li>
+                <li class="menu-item"><a href="admin-books.html" class="menu-link"><i class="fas fa-book"></i><span class="menu-text">图书管理</span></a></li>
+                <li class="menu-item"><a href="admin-users.html" class="menu-link active"><i class="fas fa-users"></i><span class="menu-text">用户管理</span></a></li>
+                <li class="menu-item"><a href="admin-activities.html" class="menu-link"><i class="fas fa-calendar-alt"></i><span class="menu-text">活动管理</span></a></li>
+                <li class="menu-item"><a href="admin-notifications.html" class="menu-link"><i class="fas fa-bell"></i><span class="menu-text">通知管理</span></a></li>
+                <li class="menu-item"><a href="admin-stats.html" class="menu-link"><i class="fas fa-chart-bar"></i><span class="menu-text">数据统计</span></a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content admin-main">
+            <div class="page-header">
+                <h1>用户管理</h1>
+                <p>管理系统中的用户账号</p>
+            </div>
+
+            <div class="filter-bar">
+                <div class="filter-group search-group">
+                    <label>搜索</label>
+                    <input type="text" id="search-input" placeholder="搜索手机号或学校...">
+                </div>
+                <div class="filter-group">
+                    <label>用户类型</label>
+                    <select id="filter-user-type">
+                        <option value="">全部用户</option>
+                        <option value="admin">管理员</option>
+                        <option value="phone">手机号用户</option>
+                        <option value="education">教育号用户</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>状态</label>
+                    <select id="filter-status">
+                        <option value="">全部状态</option>
+                        <option value="active">正常</option>
+                        <option value="suspended">已禁用</option>
+                    </select>
+                </div>
+                <button class="btn-filter" onclick="loadUsers()">
+                    <i class="fas fa-search"></i> 搜索
+                </button>
+                <button class="btn-export-small" onclick="exportUsers()">
+                    <i class="fas fa-download"></i> 导出CSV
+                </button>
+                <button class="btn-filter" onclick="showImportModal()" style="background: #28a745;">
+                    <i class="fas fa-file-import"></i> 批量导入
+                </button>
+            </div>
+
+            <div class="batch-action-bar" id="batch-action-bar" style="display: none;">
+                <label class="select-all">
+                    <input type="checkbox" id="select-all" onchange="toggleSelectAll(this.checked)">
+                    <span>全选当前页</span>
+                </label>
+                <span class="selected-count">已选择 <strong id="selected-count">0</strong> 项<span id="total-info"></span></span>
+                <button class="btn-select-all-filtered" id="select-all-btn" onclick="selectAllFiltered()">选择全部</button>
+                <div class="batch-actions">
+                    <button class="btn-batch btn-batch-approve" onclick="batchEnableUsers()">
+                        <i class="fas fa-check"></i> 批量启用
+                    </button>
+                    <button class="btn-batch btn-batch-reject" onclick="batchDisableUsers()">
+                        <i class="fas fa-ban"></i> 批量禁用
+                    </button>
+                </div>
+            </div>
+
+            <div class="users-table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="col-checkbox">
+                                <input type="checkbox" id="select-all-header" onchange="toggleSelectAll(this.checked)">
+                            </th>
+                            <th class="col-avatar">头像</th>
+                            <th class="col-user">用户信息</th>
+                            <th class="col-school">学校</th>
+                            <th class="col-borrow">借阅情况</th>
+                            <th class="col-date">注册时间</th>
+                            <th class="col-status">状态</th>
+                            <th class="col-actions">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-list">
+                        <tr><td colspan="8" class="loading-cell"><i class="fas fa-spinner fa-spin"></i> 加载中...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination" id="pagination"></div>
+        </main>
+    </div>
+
+    <!-- 用户详情弹窗 -->
+    <div class="modal-overlay" id="modal-detail">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-user"></i> 用户详情</h3>
+                <span class="close-modal" onclick="closeModal('modal-detail')">&times;</span>
+            </div>
+            <div class="modal-body" id="modal-detail-content"></div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-detail')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑用户弹窗 -->
+    <div class="modal-overlay" id="modal-edit">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> 编辑用户</h3>
+                <span class="close-modal" onclick="closeModal('modal-edit')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="user-form">
+                    <input type="hidden" id="edit-user-id">
+                    <div class="form-group">
+                        <label>手机号</label>
+                        <input type="text" id="edit-phone" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>学校</label>
+                        <input type="text" id="edit-school">
+                    </div>
+                    <div class="form-group">
+                        <label>生日</label>
+                        <input type="date" id="edit-birthday">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-edit')">取消</button>
+                <button class="btn-confirm" onclick="saveUser()"><i class="fas fa-save"></i> 保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 重置密码弹窗 -->
+    <div class="modal-overlay" id="modal-password">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fas fa-key"></i> 重置密码</h3>
+                <span class="close-modal" onclick="closeModal('modal-password')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>为用户 <strong id="reset-user-name"></strong> 重置密码</p>
+                <div class="form-group">
+                    <label>新密码</label>
+                    <input type="text" id="new-password" value="123456">
+                    <small>默认密码: 123456</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-password')">取消</button>
+                <button class="btn-confirm" onclick="confirmResetPassword()"><i class="fas fa-key"></i> 确认重置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认弹窗 -->
+    <div class="modal-overlay" id="modal-delete">
+        <div class="modal-box">
+            <div class="modal-header warning-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> 确认删除</h3>
+                <span class="close-modal" onclick="closeModal('modal-delete')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>确定要删除用户 "<strong id="delete-user-name"></strong>" 吗？</p>
+                <p class="warning-text">此操作将删除该用户的所有数据，且不可恢复！</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-delete')">取消</button>
+                <button class="btn-danger" onclick="confirmDelete()"><i class="fas fa-trash"></i> 确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量导入用户弹窗 -->
+    <div class="modal-overlay" id="modal-import">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-import"></i> 批量导入用户</h3>
+                <span class="close-modal" onclick="closeModal('modal-import')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="import-info">
+                    <p><strong>支持格式：</strong>Excel (.xlsx, .xls) 或 CSV 文件</p>
+                    <p><strong>必填字段：</strong>手机号</p>
+                    <p><strong>可选字段：</strong>密码（默认123456）、学校、生日（格式：YYYY-MM-DD）</p>
+                </div>
+                <div class="import-actions" style="margin: 15px 0;">
+                    <a href="/api/admin/users/import-template" class="btn-filter" style="text-decoration: none; display: inline-block;">
+                        <i class="fas fa-download"></i> 下载模板
+                    </a>
+                </div>
+                <div class="import-drop-zone" id="import-drop-zone" onclick="document.getElementById('import-file').click()">
+                    <input type="file" id="import-file" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleFileSelect(this)">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>点击或拖拽文件到此处上传</p>
+                    <p id="import-file-name" style="color: #666; font-size: 12px;"></p>
+                </div>
+                <div id="import-result" style="margin-top: 15px; display: none;">
+                    <div class="import-stats"></div>
+                    <div class="import-errors" style="max-height: 150px; overflow-y: auto;"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-import')">关闭</button>
+                <button class="btn-confirm" id="btn-import" onclick="submitImport()" disabled>
+                    <i class="fas fa-upload"></i> 开始导入
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/admin-users.js"></script>
+</body>
+
+</html>

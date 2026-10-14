@@ -1,0 +1,137 @@
+<view class="page">
+  <view wx:if="{{!isLoggedIn}}" class="login-prompt">
+    <view class="login-card">
+      <view class="login-icon">📚</view>
+      <text class="login-title">智阅同行</text>
+      <text class="login-desc">登录后享受更多服务</text>
+      <view class="login-btn" bindtap="onLogin">
+        <text>立即登录</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:else>
+    <view class="user-card">
+      <view class="user-avatar">
+        <image wx:if="{{userInfo.avatar_url}}" src="{{userInfo.avatar_url}}" class="avatar-img" mode="aspectFill"/>
+        <view wx:else class="avatar-placeholder">
+          <text>{{userInfo.phone ? userInfo.phone[0] : 'U'}}</text>
+        </view>
+      </view>
+      <view class="user-info">
+        <text class="user-phone">{{userInfo.phone || '用户'}}</text>
+        <text class="user-status">正常使用中</text>
+      </view>
+      <view class="settings-btn" bindtap="goToPage" data-page="/pages/settings/settings">
+        <text>⚙️</text>
+      </view>
+    </view>
+
+    <view class="stats-card">
+      <view class="stat-item" bindtap="goToPage" data-page="/pages/favorites/favorites">
+        <text class="stat-value">{{stats.favorites}}</text>
+        <text class="stat-label">收藏</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item" bindtap="goToPage" data-page="/pages/borrowed/borrowed">
+        <text class="stat-value">{{stats.borrowed}}</text>
+        <text class="stat-label">借阅</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item" bindtap="goToPage" data-page="/pages/notifications/notifications">
+        <text class="stat-value">{{stats.notifications}}</text>
+        <text class="stat-label">消息</text>
+      </view>
+    </view>
+
+    <view class="menu-section">
+      <view class="menu-item" bindtap="goToPage" data-page="/pages/favorites/favorites">
+        <view class="menu-icon red">
+          <text>❤️</text>
+        </view>
+        <view class="menu-content">
+          <text class="menu-title">我的收藏</text>
+          <text class="menu-desc">查看收藏的图书</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
+
+      <view class="menu-item" bindtap="goToPage" data-page="/pages/borrowed/borrowed">
+        <view class="menu-icon blue">
+          <text>📖</text>
+        </view>
+        <view class="menu-content">
+          <text class="menu-title">正在借阅</text>
+          <text class="menu-desc">管理借阅中的图书</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
+
+      <view class="menu-item" bindtap="goToPage" data-page="/pages/history/history">
+        <view class="menu-icon green">
+          <text>📋</text>
+        </view>
+        <view class="menu-content">
+          <text class="menu-title">借阅历史</text>
+          <text class="menu-desc">查看历史借阅记录</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
+
+      <view class="menu-item" bindtap="goToPage" data-page="/pages/notifications/notifications">
+        <view class="menu-icon orange">
+          <text>🔔</text>
+        </view>
+        <view class="menu-content">
+          <text class="menu-title">消息通知</text>
+          <text class="menu-desc">查看系统消息</text>
+        </view>
+        <view class="menu-badge" wx:if="{{stats.notifications > 0}}">
+          <text>{{stats.notifications}}</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+
+    <view class="menu-section">
+      <view class="menu-item" bindtap="goToPage" data-page="/pages/ai-assistant/ai-assistant">
+        <view class="menu-icon purple">
+          <text>🤖</text>
+        </view>
+        <view class="menu-content">
+          <text class="menu-title">AI阅读助手</text>
+          <text class="menu-desc">智能推荐与问答</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
+
+      <view class="menu-item" bindtap="goToPage" data-page="/pages/reading-report/reading-report">
+        <view class="menu-icon cyan">
+          <text>📊</text>
+        </view>
+        <view class="menu-content">
+          <text class="menu-title">阅读报告</text>
+          <text class="menu-desc">分析阅读偏好</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
+
+      <view class="menu-item" bindtap="goToPage" data-page="/pages/settings/settings">
+        <view class="menu-icon gray">
+          <text>⚙️</text>
+        </view>
+        <view class="menu-content">
+          <text class="menu-title">个人设置</text>
+          <text class="menu-desc">修改个人信息</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+
+    <view class="logout-section">
+      <view class="logout-btn" bindtap="onLogout">
+        <text>退出登录</text>
+      </view>
+    </view>
+  </view>
+</view>

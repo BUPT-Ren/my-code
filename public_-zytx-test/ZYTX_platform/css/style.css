@@ -1,0 +1,485 @@
+:root {
+    --primary-blue: #1A365D;
+    --secondary-blue: #2A4A7F;
+    --accent-blue: #4A86E8;
+    --success-green: #38A169;
+    --warning-yellow: #D69E2E;
+    --error-red: #E53E3E;
+    --light-bg: #F7FAFC;
+    --light-gray: #E2E8F0;
+    --mid-gray: #A0AEC0;
+    --dark-gray: #2D3748;
+    --text-primary: #2D3748;
+    --text-secondary: #718096;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', 'Source Han Sans CN', 'Microsoft YaHei', sans-serif;
+    text-decoration: none;
+}
+
+body {
+    background-color: var(--light-bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* 布局结构 */
+.container {
+    display: grid;
+    /* 定义两列：第一列由内容决定(侧边栏宽度)，第二列占满剩余 */
+    grid-template-columns: auto 1fr;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* 顶部导航栏 */
+.top-nav {
+    grid-column: 1 / -1;
+    background: var(--primary-blue);
+    color: white;
+    padding: 0.8rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.logo i {
+    font-size: 1.8rem;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav-icon {
+    font-size: 1.2rem;
+        cursor: pointer;
+        color: white;
+        transition: var(--transition);
+}
+
+.nav-icon:hover {
+    color: var(--accent-blue);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    position: relative;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    width: 250px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    margin-top: 0.5rem;
+    padding: 1rem;
+    color: var(--text-primary);
+    display: none;
+    z-index: 101;
+}
+
+.user-dropdown.show {
+    display: block;
+}
+
+.user-info {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--light-gray);
+    margin-bottom: 1rem;
+}
+
+.user-info .name {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.user-info .email,
+.user-info .phone {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.2rem;
+}
+
+.dropdown-item span {
+    color: var(--text-primary);
+    /* 黑灰色 */
+}
+
+.dropdown-item {
+    padding: 0.7rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    cursor: pointer;
+    transition: var(--transition);
+    border-radius: 6px;
+}
+
+.dropdown-item:hover {
+    background: var(--light-gray);
+}
+
+.dropdown-item i {
+    width: 20px;
+    color: var(--secondary-blue);
+}
+
+/* 侧边栏 */
+
+.main-content {
+    margin-left: 0 !important;
+    padding: 2rem;
+    width: 100%;
+    /* 确保填满 Grid 的第二列 */
+    min-width: 0;
+    /* 防止 Grid 子元素溢出问题的关键 */
+}
+
+.sidebar {
+    width: 70px;
+    /* 默认收起宽度 */
+    background: var(--primary-blue);
+    color: white;
+    transition: width 0.3s ease;
+    /* 宽度变化的动画 */
+
+    /* 实现固定不随页面滚动 */
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    /* 占满视口高度 */
+    overflow-y: auto;
+    /* 侧边栏内容过多时内部滚动 */
+    z-index: 100;
+}
+
+.sidebar.expanded {
+    width: 280px;
+}
+
+.sidebar-header {
+    padding: 1.5rem 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sidebar-toggle {
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0 0.5rem;
+}
+
+.menu-item {
+    margin-bottom: 0.5rem;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    transition: var(--transition);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.menu-link:hover {
+    background: var(--secondary-blue);
+}
+
+.menu-link.active {
+    background: var(--accent-blue);
+}
+
+.menu-link i {
+    font-size: 1.3rem;
+    min-width: 40px;
+}
+
+.menu-text {
+    margin-left: 1rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar.expanded .menu-text {
+    opacity: 1;
+}
+
+.badge {
+    background: var(--accent-blue);
+    color: white;
+    border-radius: 20px;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.8rem;
+    margin-left: auto;
+}
+/* 响应式设计 */
+@media (max-width: 992px) {
+    .container {
+        display: block;
+        /* 移动端取消 Grid，改为传统流式 */
+    }
+
+    .sidebar {
+        position: fixed;
+        /* 移动端改为浮动层或隐藏 */
+        left: -280px;
+        /* 默认隐藏 */
+        height: 100%;
+    }
+
+    .sidebar.expanded {
+        left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-nav {
+        padding: 0.8rem 1rem;
+    }
+}
+/* 头像容器：确保圆形、居中 */
+.user-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    /* 圆形 */
+    background: var(--accent-blue);
+    /* 默认蓝底 */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+    overflow: hidden;
+    /* 关键：裁剪溢出的图片部分 */
+    flex-shrink: 0;
+    /* 防止被挤压 */
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* 轻微边框增加质感 */
+}
+
+/* 头像图片：等比例缩放居中填满 */
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* 关键：保持比例填满容器 */
+    display: block;
+}
+
+/* 下拉菜单中的用户信息区域调整 */
+.user-dropdown .user-info {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    background-color: #f8f9fa;
+}
+
+.user-dropdown .user-info .name {
+    font-weight: 700;
+    color: var(--primary-blue);
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+}
+
+.user-dropdown .user-info .email {
+    color: #666;
+    font-size: 0.85rem;
+    margin-bottom: 0.2rem;
+}
+
+.user-dropdown .user-info .phone {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+/* 借阅申请模态框 */
+.modal-overlay-borrow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay-borrow.show {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-box-borrow {
+    background: white;
+    width: 90%;
+    max-width: 480px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay-borrow.show .modal-box-borrow {
+    transform: translateY(0);
+}
+
+.modal-header-borrow {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--light-gray);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header-borrow h3 {
+    color: var(--primary-blue);
+    margin: 0;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-header-borrow h3 i {
+    color: var(--accent-blue);
+}
+
+.close-modal-borrow {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+}
+
+.close-modal-borrow:hover {
+    color: var(--error-red);
+}
+
+.modal-body-borrow {
+    padding: 1.5rem;
+}
+
+.modal-body-borrow > p {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.borrow-notice {
+    background: #F0F9FF;
+    border: 1px solid #BAE6FD;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.borrow-notice p {
+    margin: 0.4rem 0;
+    font-size: 0.9rem;
+    color: #0369A1;
+    line-height: 1.6;
+}
+
+.borrow-notice p:first-child {
+    margin-bottom: 0.6rem;
+}
+
+.borrow-notice strong {
+    color: #075985;
+}
+
+.modal-footer-borrow {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--light-gray);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+    background: #F9FAFB;
+    border-radius: 0 0 12px 12px;
+}
+
+.btn-cancel-borrow {
+    background: white;
+    border: 1px solid var(--light-gray);
+    color: var(--text-primary);
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.btn-cancel-borrow:hover {
+    background: var(--light-gray);
+}
+
+.btn-confirm-borrow {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: var(--transition);
+}
+
+.btn-confirm-borrow:hover {
+    background: var(--secondary-blue);
+}
+
+.btn-confirm-borrow:disabled {
+    background: var(--mid-gray);
+    cursor: not-allowed;
+}

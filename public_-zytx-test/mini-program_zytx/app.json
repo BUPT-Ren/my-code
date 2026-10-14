@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/login/login",
+    "pages/register/register",
+    "pages/forgot-password/forgot-password",
+    "pages/book-detail/book-detail",
+    "pages/ai-assistant/ai-assistant",
+    "pages/reading-report/reading-report",
+    "pages/activity/activity",
+    "pages/activity-detail/activity-detail",
+    "pages/profile/profile",
+    "pages/favorites/favorites",
+    "pages/borrowed/borrowed",
+    "pages/history/history",
+    "pages/notifications/notifications",
+    "pages/settings/settings"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#5B8DEF",
+    "navigationBarTitleText": "智阅同行",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F5F8FA",
+    "enablePullDownRefresh": true
+  },
+  "tabBar": {
+    "color": "#9B9B9B",
+    "selectedColor": "#5B8DEF",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/activity/activity",
+        "text": "活动"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书详情 - 智阅同行</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/book-cards.css">
+    <style>
+        .back-nav {
+            position: fixed;
+            top: 80px;
+            left: 75px;
+            z-index: 100;
+            transition: left 0.3s ease;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .back-btn:hover {
+            background: var(--bg-secondary);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+        .book-detail-container {
+            padding: 1.5rem 2rem;
+            padding-top: 70px;
+        }
+        .book-header {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .book-cover-wrapper {
+            flex-shrink: 0;
+        }
+        .book-cover-wrapper img {
+            width: 200px;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .book-info-wrapper {
+            flex: 1;
+        }
+        .book-info-wrapper h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        .book-info-wrapper .author {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        .book-meta-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .book-meta-list .meta-item {
+            display: flex;
+            gap: 8px;
+        }
+        .book-meta-list .meta-label {
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+        .book-meta-list .meta-value {
+            color: var(--text-primary);
+        }
+        .book-status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        .book-status-badge.available {
+            background: #D1FAE5;
+            color: #059669;
+        }
+        .book-status-badge.unavailable {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+        .book-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .book-actions .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .book-actions .btn-borrow {
+            background: var(--accent-blue);
+            color: white;
+        }
+        .book-actions .btn-borrow:hover {
+            background: #2563EB;
+        }
+        .book-actions .btn-favorite {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        .book-actions .btn-favorite:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+        .book-actions .btn-favorite.is-favorited {
+            background: #EF4444;
+            color: white;
+            border-color: #EF4444;
+        }
+        .book-actions .btn-borrow.btn-pending {
+            background: #F59E0B;
+            color: white;
+        }
+        .section-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .section-card h2 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-card h2 i {
+            color: var(--accent-blue);
+        }
+        .book-description {
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        .ai-evaluation {
+            background: linear-gradient(135deg, #EEF2FF, #E0E7FF);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-blue);
+        }
+        .ai-evaluation .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--accent-blue);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 1rem;
+        }
+        .ai-evaluation .content {
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+        .reviews-section {
+            margin-top: 1rem;
+        }
+        .review-item {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        .review-item:last-child {
+            margin-bottom: 0;
+        }
+        .review-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+        .review-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .review-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .review-name {
+            font-weight: 500;
+        }
+        .review-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .review-rating {
+            color: #F59E0B;
+        }
+        .review-content {
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+        .write-review {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .write-review h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        .write-review textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 1rem;
+        }
+        .write-review .rating-input {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+        .write-review .rating-input label {
+            color: var(--text-secondary);
+        }
+        .write-review .rating-input .stars {
+            display: flex;
+            gap: 4px;
+        }
+        .write-review .rating-input .stars i {
+            cursor: pointer;
+            color: #D1D5DB;
+            font-size: 1.25rem;
+            transition: color 0.2s;
+        }
+        .write-review .rating-input .stars i.active,
+        .write-review .rating-input .stars i:hover {
+            color: #F59E0B;
+        }
+        .write-review button {
+            padding: 10px 24px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #D1D5DB;
+        }
+        @media (max-width: 768px) {
+            .book-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .book-meta-list {
+                grid-template-columns: 1fr;
+            }
+            .book-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <span>智阅同行</span>
+            </div>
+            <div class="nav-right">
+                <a href="notifications.html" class="nav-icon">
+                    <i class="fas fa-bell"></i>
+                </a>
+                <a href="settings.html" class="nav-icon">
+                    <i class="fas fa-cog"></i>
+                </a>
+                <div class="user-profile" id="user-profile">
+                    <div class="user-avatar" id="nav-user-avatar">U</div>
+                    <span id="nav-user-name">用户</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="user-info">
+                            <div class="name" id="dropdown-user-name">用户</div>
+                            <div class="phone" id="dropdown-user-phone"></div>
+                        </div>
+                        <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i><span>个人资料</span></a>
+                        <a href="favorites.html" class="dropdown-item"><i class="fas fa-heart"></i><span>我的收藏</span></a>
+                        <a href="history.html" class="dropdown-item"><i class="fas fa-history"></i><span>借阅历史</span></a>
+                        <a href="settings.html" class="dropdown-item"><i class="fas fa-cog"></i><span>偏好设置</span></a>
+                        <a href="admin.html" class="dropdown-item" id="admin-entry" style="display: none;"><i class="fas fa-shield-alt"></i><span>管理后台</span></a>
+                        <a href="#" class="dropdown-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>退出登录</span></a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="index.html" class="menu-link">
+                        <i class="fas fa-home"></i>
+                        <span class="menu-text">首页</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="favorites.html" class="menu-link">
+                        <i class="fas fa-bookmark"></i>
+                        <span class="menu-text">收藏的书籍</span>
+                        <span class="badge" data-type="favorites">0</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="history.html" class="menu-link">
+                        <i class="fas fa-history"></i>
+                        <span class="menu-text">借阅历史</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="borrowed.html" class="menu-link">
+                        <i class="fas fa-book"></i>
+                        <span class="menu-text">借阅及申请</span>
+                        <span class="badge" data-type="borrowed">0</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="activities.html" class="menu-link">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="menu-text">活动</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="recommend.html" class="menu-link">
+                        <i class="fas fa-robot"></i>
+                        <span class="menu-text">AI推荐</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="stats.html" class="menu-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span class="menu-text">阅读统计</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="book-detail-container" id="book-detail">
+                <div class="loading-placeholder">
+                    <i class="fas fa-spinner fa-spin"></i> 加载中...
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/book-detail.js"></script>
+</body>
+
+</html>

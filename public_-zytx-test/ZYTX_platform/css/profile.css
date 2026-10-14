@@ -1,0 +1,144 @@
+/* 主内容区域 */
+.main-content {
+    margin-left: 0;
+    padding: 2rem;
+}
+/* 个人信息卡片 */
+.profile-card {
+    display: flex;
+    gap: 2rem;
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.profile-card .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    color: white;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.profile-card .info p {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+/* 联系方式卡片 */
+.contact-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.contact-card h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.contact-card .contact-info p {
+    margin-bottom: 0.6rem;
+    font-size: 0.95rem;
+}
+
+.contact-card .contact-info i {
+    color: var(--accent-blue);
+    margin-right: 0.5rem;
+}
+
+/* 收藏书籍概览 */
+.favorites-overview {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.favorites-overview h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.books-grid {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.book-card {
+    background: var(--light-bg);
+    border-radius: 8px;
+    padding: 0.5rem;
+    width: 120px;
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+}
+
+.book-card .book-cover img {
+    width: 100%;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+}
+
+.book-card .book-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* 查看全部收藏按钮 */
+.view-all {
+    display: inline-block;
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+    color: var(--accent-blue);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.view-all:hover {
+    text-decoration: underline;
+}
+
+/* 最近活动 */
+.activity-section {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.activity-section h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.activity-list {
+    list-style: none;
+}
+
+.activity-list li {
+    margin-bottom: 0.6rem;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI推荐 - 智阅同行</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/recommend.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- 顶部导航栏 -->
+        <nav class="top-nav">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <span>智阅同行</span>
+            </div>
+            <div class="nav-right">
+                <a href="notifications.html" class="nav-icon">
+                    <i class="fas fa-bell"></i>
+                </a>
+                <a href="settings.html" class="nav-icon">
+                    <i class="fas fa-cog"></i>
+                </a>
+                <div class="user-profile" id="user-profile">
+                    <div class="user-avatar" id="nav-user-avatar">U</div>
+                    <span id="nav-user-name">用户</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="user-info">
+                            <div class="name" id="dropdown-user-name">用户</div>
+                            <div class="phone" id="dropdown-user-phone"></div>
+                        </div>
+                        <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i><span>个人资料</span></a>
+                        <a href="favorites.html" class="dropdown-item"><i class="fas fa-heart"></i><span>我的收藏</span></a>
+                        <a href="history.html" class="dropdown-item"><i class="fas fa-history"></i><span>借阅历史</span></a>
+                        <a href="settings.html" class="dropdown-item"><i class="fas fa-cog"></i><span>偏好设置</span></a>
+                        <a href="admin.html" class="dropdown-item" id="admin-entry" style="display: none;"><i class="fas fa-shield-alt"></i><span>管理后台</span></a>
+                        <a href="#" class="dropdown-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>退出登录</span></a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 侧边栏 -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="index.html" class="menu-link">
+                        <i class="fas fa-home"></i>
+                        <span class="menu-text">首页</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="favorites.html" class="menu-link">
+                        <i class="fas fa-bookmark"></i>
+                        <span class="menu-text">收藏的书籍</span>
+                        <span class="badge" data-type="favorites">0</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="history.html" class="menu-link">
+                        <i class="fas fa-history"></i>
+                        <span class="menu-text">借阅历史</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="borrowed.html" class="menu-link">
+                        <i class="fas fa-book"></i>
+                        <span class="menu-text">借阅及申请</span>
+                        <span class="badge" data-type="borrowed">0</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="activities.html" class="menu-link">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="menu-text">活动</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="recommend.html" class="menu-link active">
+                        <i class="fas fa-robot"></i>
+                        <span class="menu-text">AI推荐</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="stats.html" class="menu-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span class="menu-text">阅读统计</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- 主内容区域 - 左右布局 -->
+        <main class="main-content recommend-main">
+            <!-- 左侧：AI 对话区域 -->
+            <section class="ai-chat-section">
+                <div class="chat-header">
+                    <div class="chat-title">
+                        <i class="fas fa-robot"></i>
+                        <span>AI阅读助手</span>
+                    </div>
+                    <button class="clear-chat-btn" id="clear-chat" title="清空对话">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+                
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message assistant">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>你好！我是你的AI阅读助手。我可以帮助你：</p>
+                            <ul>
+                                <li>推荐适合你的书籍</li>
+                                <li>讨论书籍内容和作者风格</li>
+                                <li>分享阅读心得和感悟</li>
+                                <li>解答关于阅读的问题</li>
+                            </ul>
+                            <p>有什么想聊的吗？</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-area">
+                    <div class="chat-input-wrapper">
+                        <input type="text" id="chat-input" placeholder="输入消息，与AI聊聊阅读..." />
+                        <button id="send-btn" class="send-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="quick-btn" data-msg="推荐一本好书">推荐一本好书</button>
+                        <button class="quick-btn" data-msg="我最近喜欢看科幻小说">我喜欢科幻小说</button>
+                        <button class="quick-btn" data-msg="有什么经典名著推荐吗？">经典名著推荐</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 右侧：推荐书籍区域 -->
+            <section class="recommend-books-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-magic"></i> 为你推荐</h2>
+                    <button id="refresh-recommend" class="refresh-btn" title="刷新推荐">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                
+                <div class="books-list" id="recommend-books-list">
+                    <div class="books-loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <span>AI正在分析...</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/main.js?v=4"></script>
+    <script src="js/recommend.js?v=4"></script>
+</body>
+
+</html>

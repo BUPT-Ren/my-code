@@ -1,0 +1,173 @@
+<view class="page">
+  <view class="header">
+    <view class="header-left" bindtap="goBack">
+      <text class="back-icon">‹</text>
+    </view>
+    <text class="header-title">借阅及申请</text>
+    <view class="header-right"></view>
+  </view>
+
+  <view class="tab-bar">
+    <view class="tab-item {{activeTab === 'borrowing' ? 'active' : ''}}" bindtap="onTabChange" data-tab="borrowing">
+      <text class="tab-icon">📖</text>
+      <text>正在借阅</text>
+    </view>
+    <view class="tab-item {{activeTab === 'requests' ? 'active' : ''}}" bindtap="onTabChange" data-tab="requests">
+      <text class="tab-icon">⏳</text>
+      <text>待审核申请</text>
+      <view class="tab-badge" wx:if="{{pendingRequests.length > 0}}">{{pendingRequests.length}}</view>
+    </view>
+  </view>
+
+  <view wx:if="{{loading && activeTab === 'borrowing'}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 正在借阅Tab -->
+  <view wx:if="{{activeTab === 'borrowing'}}" class="borrowed-content">
+    <view wx:if="{{borrowedBooks.length === 0 && !loading}}" class="empty-state">
+      <text class="empty-icon">📚</text>
+      <text class="empty-text">暂无借阅中的图书</text>
+      <view class="empty-tip">
+        <text>去首页发现好书吧~</text>
+      </view>
+    </view>
+
+    <view wx:else class="borrowed-list">
+      <view 
+        wx:for="{{borrowedBooks}}" 
+        wx:key="record_id" 
+        class="borrow-item"
+      >
+        <view class="borrow-cover" bindtap="onBookTap" data-id="{{item.book_id}}">
+          <image 
+            wx:if="{{item.cover_url}}" 
+            src="{{item.cover_url}}" 
+            mode="aspectFill"
+            class="cover-image"
+          />
+          <view wx:else class="cover-color" style="background: {{item.coverColor}};">
+            <text class="cover-emoji">📖</text>
+          </view>
+        </view>
+        
+        <view class="borrow-info">
+          <text class="borrow-title">{{item.title}}</text>
+          <text class="borrow-author">{{item.author || '未知作者'}}</text>
+          
+          <view class="borrow-dates">
+            <view class="date-item">
+              <text class="date-label">借阅</text>
+              <text class="date-value">{{item.borrow_time}}</text>
+            </view>
+            <view class="date-item">
+              <text class="date-label">应还</text>
+              <text class="date-value">{{item.due_time}}</text>
+            </view>
+          </view>
+
+          <view class="borrow-status-row">
+            <view class="days-left {{item.daysLeft < 0 ? 'overdue' : item.daysLeft <= 3 ? 'warning' : 'normal'}}">
+              <text wx:if="{{item.daysLeft < 0}}">已逾期 {{-item.daysLeft}} 天</text>
+              <text wx:elif="{{item.daysLeft === 0}}">今日到期</text>
+              <text wx:else>剩余 {{item.daysLeft}} 天</text>
+            </view>
+
+            <view wx:if="{{pendingStatus[item.record_id]}}" class="pending-tag">
+              <text wx:if="{{pendingStatus[item.record_id].request_type === 'return'}}">⏳ 还书审核中</text>
+              <text wx:elif="{{pendingStatus[item.record_id].request_type === 'renew'}}">⏳ 续借审核中</text>
+              <text wx:else>⏳ 审核中</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="borrow-actions">
+          <view 
+            wx:if="{{pendingStatus[item.record_id] && pendingStatus[item.record_id].request_type === 'return'}}"
+            class="action-btn disabled"
+          >
+            <text class="btn-text">审核中</text>
+          </view>
+          <view 
+            wx:else
+            class="action-btn return-btn" 
+            bindtap="onRequestReturn" 
+            data-record-id="{{item.record_id}}"
+            data-title="{{item.title}}"
+          >
+            <text class="btn-text">归还</text>
+          </view>
+
+          <view 
+            wx:if="{{pendingStatus[item.record_id] && pendingStatus[item.record_id].request_type === 'renew'}}"
+            class="action-btn disabled"
+          >
+            <text class="btn-text">审核中</text>
+          </view>
+          <view 
+            wx:else
+            class="action-btn renew-btn" 
+            bindtap="onRequestRenew" 
+            data-record-id="{{item.record_id}}"
+            data-title="{{item.title}}"
+          >
+            <text class="btn-text">续借</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 待审核申请Tab -->
+  <view wx:if="{{activeTab === 'requests'}}" class="requests-content">
+    <view wx:if="{{pendingRequests.length === 0}}" class="empty-state">
+      <text class="empty-icon">📋</text>
+      <text class="empty-text">暂无待审核的申请</text>
+    </view>
+
+    <view wx:else class="requests-list">
+      <view 
+        wx:for="{{pendingRequests}}" 
+        wx:key="request_id" 
+        class="request-item"
+      >
+        <view class="request-cover">
+          <image 
+            wx:if="{{item.book_cover}}" 
+            src="{{item.book_cover}}" 
+            mode="aspectFill"
+            class="cover-image"
+          />
+          <view wx:else class="cover-placeholder">
+            <text>📖</text>
+          </view>
+        </view>
+
+        <view class="request-info">
+          <text class="request-title">{{item.book_title}}</text>
+          <view class="request-type">
+            <text wx:if="{{item.request_type === 'borrow'}}">📚 借阅申请</text>
+            <text wx:elif="{{item.request_type === 'return'}}">📤 还书申请</text>
+            <text wx:elif="{{item.request_type === 'renew'}}">⏰ 续借申请</text>
+            <text wx:elif="{{item.request_type === 'lost'}}">⚠️ 挂失申请</text>
+            <text wx:else>📄 其他申请</text>
+          </view>
+          <text class="request-time">申请时间：{{item.request_time}}</text>
+        </view>
+
+        <view class="request-actions">
+          <view class="status-badge pending">待审核</view>
+          <view 
+            class="cancel-btn" 
+            bindtap="onCancelRequest" 
+            data-id="{{item.request_id}}"
+            data-title="{{item.book_title}}"
+          >
+            <text>撤销</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

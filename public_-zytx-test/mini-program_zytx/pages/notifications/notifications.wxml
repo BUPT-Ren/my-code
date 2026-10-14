@@ -1,0 +1,54 @@
+<view class="page">
+  <view class="header">
+    <view class="header-left" bindtap="goBack">
+      <text class="back-icon">‹</text>
+    </view>
+    <text class="header-title">消息通知</text>
+    <view class="header-right" wx:if="{{unreadCount > 0}}" bindtap="onMarkAllRead">
+      <text class="mark-read">全部已读</text>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <view wx:elif="{{notifications.length === 0}}" class="empty-state">
+    <text class="empty-icon">🔔</text>
+    <text class="empty-text">暂无消息通知</text>
+  </view>
+
+  <view wx:else class="notification-list">
+    <view class="unread-bar" wx:if="{{unreadCount > 0}}">
+      <text class="unread-dot"></text>
+      <text>{{unreadCount}} 条未读消息</text>
+    </view>
+
+    <view 
+      wx:for="{{notifications}}" 
+      wx:key="notification_id" 
+      class="notification-item {{item.is_read ? 'read' : 'unread'}}"
+      bindtap="onNotificationTap"
+      data-id="{{item.notification_id}}"
+    >
+      <view class="notification-icon">
+        <text wx:if="{{item.type === 'borrow'}}">📚</text>
+        <text wx:elif="{{item.type === 'return'}}">📤</text>
+        <text wx:elif="{{item.type === 'activity'}}">📅</text>
+        <text wx:elif="{{item.type === 'reminder'}}">⏰</text>
+        <text wx:else>📢</text>
+      </view>
+      
+      <view class="notification-content">
+        <view class="notification-header">
+          <text class="notification-title">{{item.title}}</text>
+          <text class="notification-time">{{item.created_at}}</text>
+        </view>
+        <text class="notification-text">{{item.content}}</text>
+      </view>
+
+      <view class="notification-dot" wx:if="{{!item.is_read}}"></view>
+    </view>
+  </view>
+</view>

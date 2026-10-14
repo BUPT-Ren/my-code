@@ -1,0 +1,156 @@
+<view class="page" wx:if="{{book}}">
+  <view class="book-header">
+    <view class="book-cover-color" style="background: {{book.coverColor || '#5B8DEF'}};">
+      <text class="cover-emoji">📕</text>
+    </view>
+    <view class="book-overlay"></view>
+    <view class="header-content">
+      <view class="back-btn" bindtap="goBack">
+        <text>‹</text>
+      </view>
+      <view class="book-basic">
+        <view class="cover-thumb-color" style="background: {{book.coverColor || '#5B8DEF'}};">
+          <text class="cover-emoji-small">📖</text>
+        </view>
+        <view class="book-info">
+          <text class="book-title">{{book.title}}</text>
+          <text class="book-author">{{book.author}}</text>
+          <view class="book-meta">
+            <text class="meta-item" wx:if="{{book.genres && book.genres[0]}}">{{book.genres[0]}}</text>
+            <text class="meta-item" wx:elif="{{book.category}}">{{book.category}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="status-bar">
+    <view class="status-item">
+      <text class="status-label">可借</text>
+      <text class="status-value {{book.available > 0 ? 'available' : 'unavailable'}}">{{book.available}}本</text>
+    </view>
+    <view class="status-divider"></view>
+    <view class="status-item">
+      <text class="status-label">ISBN</text>
+      <text class="status-value">{{book.isbn || '暂无'}}</text>
+    </view>
+    <view class="status-divider"></view>
+    <view class="status-item">
+      <text class="status-label">位置</text>
+      <text class="status-value">{{book.location || '图书馆'}}</text>
+    </view>
+  </view>
+
+  <view class="action-buttons">
+    <view class="action-btn secondary {{isFavorited ? 'favorited' : ''}}" bindtap="onToggleFavorite">
+      <text class="action-icon">{{isFavorited ? '♥' : '♡'}}</text>
+      <text class="action-text">{{isFavorited ? '已收藏' : '收藏'}}</text>
+    </view>
+    
+    <view wx:if="{{hasPendingRequest}}" class="action-btn pending" bindtap="onCancelRequest">
+      <text class="action-icon">⏳</text>
+      <text class="action-text">审核中</text>
+    </view>
+    <view wx:elif="{{book.available <= 0}}" class="action-btn disabled">
+      <text class="action-icon">📚</text>
+      <text class="action-text">已借完</text>
+    </view>
+    <view wx:else class="action-btn primary" bindtap="onOpenBorrowModal">
+      <text class="action-icon">📖</text>
+      <text class="action-text">申请借阅</text>
+    </view>
+  </view>
+
+  <view class="tab-bar">
+    <view class="tab-item {{currentTab === 'intro' ? 'active' : ''}}" bindtap="onTabChange" data-tab="intro">
+      <text>简介</text>
+    </view>
+    <view class="tab-item {{currentTab === 'detail' ? 'active' : ''}}" bindtap="onTabChange" data-tab="detail">
+      <text>详情</text>
+    </view>
+  </view>
+
+  <view class="tab-content">
+    <view class="tab-panel" wx:if="{{currentTab === 'intro'}}">
+      <view class="section-title">内容简介</view>
+      <text class="intro-text">{{book.introduction || book.summary || '暂无简介'}}</text>
+    </view>
+
+    <view class="tab-panel" wx:if="{{currentTab === 'detail'}}">
+      <view class="detail-list">
+        <view class="detail-row">
+          <text class="detail-label">书名</text>
+          <text class="detail-value">{{book.title}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">作者</text>
+          <text class="detail-value">{{book.author || '未知'}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">出版社</text>
+          <text class="detail-value">{{book.publisher || '未知'}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">ISBN</text>
+          <text class="detail-value">{{book.isbn || '暂无'}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">出版日期</text>
+          <text class="detail-value">{{book.publish_date || '未知'}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">馆藏数量</text>
+          <text class="detail-value">{{book.total_copies || 0}}本</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">可借数量</text>
+          <text class="detail-value {{book.available > 0 ? 'green' : 'red'}}">{{book.available}}本</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="borrow-modal {{showBorrowModal ? 'show' : ''}}" wx:if="{{showBorrowModal}}">
+    <view class="modal-mask" bindtap="onCloseBorrowModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">申请借阅</text>
+        <view class="modal-close" bindtap="onCloseBorrowModal">×</view>
+      </view>
+      
+      <view class="modal-body">
+        <view class="borrow-book-info">
+          <view class="borrow-cover-color" style="background: {{book.coverColor || '#5B8DEF'}};">
+            <text class="cover-emoji-tiny">📕</text>
+          </view>
+          <view class="borrow-info">
+            <text class="borrow-title">{{book.title}}</text>
+            <text class="borrow-author">{{book.author}}</text>
+          </view>
+        </view>
+
+        <view class="borrow-notice">
+          <view class="notice-title">借阅须知</view>
+          <view class="notice-item">1. 借阅期限为30天，请按时归还</view>
+          <view class="notice-item">2. 提交申请后需等待管理员审核</view>
+          <view class="notice-item">3. 审核通过后将收到通知</view>
+        </view>
+
+        <view class="borrow-tips">
+          <text class="tip-icon">💡</text>
+          <text class="tip-text">借阅申请提交后，请关注消息通知</text>
+        </view>
+      </view>
+
+      <view class="modal-footer">
+        <view class="btn-cancel" bindtap="onCloseBorrowModal">取消</view>
+        <view class="btn-confirm" bindtap="onConfirmBorrow">确认申请</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="loading-page" wx:if="{{loading}}">
+  <view class="loading-spinner"></view>
+  <text class="loading-text">加载中...</text>
+</view>

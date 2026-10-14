@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通知管理 - 智阅同行管理后台</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <span>智阅同行 · 管理后台</span>
+            </div>
+            <div class="nav-right">
+                <div class="user-profile" id="user-profile">
+                    <div class="user-avatar" id="admin-avatar">AD</div>
+                    <span id="admin-name">管理员</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="user-info">
+                            <div class="name" id="dropdown-name">管理员</div>
+                            <div class="phone" id="dropdown-phone"></div>
+                            <div class="admin-badge"><i class="fas fa-shield-alt"></i> 管理员</div>
+                        </div>
+                        <a href="index.html" class="dropdown-item">
+                            <i class="fas fa-home"></i>
+                            <span>返回用户端</span>
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>退出登录</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="admin.html" class="menu-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span class="menu-text">仪表盘</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="admin-requests.html" class="menu-link">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span class="menu-text">审核</span>
+                        <span class="badge badge-warning" id="sidebar-pending-count">0</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="admin-books.html" class="menu-link">
+                        <i class="fas fa-book"></i>
+                        <span class="menu-text">图书管理</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="admin-users.html" class="menu-link">
+                        <i class="fas fa-users"></i>
+                        <span class="menu-text">用户管理</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="admin-activities.html" class="menu-link">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="menu-text">活动管理</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="admin-notifications.html" class="menu-link active">
+                        <i class="fas fa-bell"></i>
+                        <span class="menu-text">通知管理</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="admin-stats.html" class="menu-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span class="menu-text">数据统计</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content admin-main">
+            <div class="page-header">
+                <h1>通知管理</h1>
+                <p>向用户发送还书提醒、逾期通知、取书通知等</p>
+            </div>
+
+            <div class="stats-grid stats-grid-4">
+                <div class="stat-card clickable" onclick="filterByStatus('borrowed')">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="stat-borrowed">-</h3>
+                        <p>借阅中</p>
+                    </div>
+                </div>
+
+                <div class="stat-card clickable" onclick="filterByStatus('overdue')">
+                    <div class="stat-icon red">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="stat-overdue">-</h3>
+                        <p>已逾期</p>
+                    </div>
+                </div>
+
+                <div class="stat-card clickable" onclick="filterByStatus('due-today')">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="stat-due-today">-</h3>
+                        <p>今日到期</p>
+                    </div>
+                </div>
+
+                <div class="stat-card clickable" onclick="filterByStatus('pending-pickup')">
+                    <div class="stat-icon green">
+                        <i class="fas fa-hand-holding"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="stat-pending-pickup">-</h3>
+                        <p>待取书</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label>借阅状态</label>
+                    <select id="filter-status">
+                        <option value="">全部状态</option>
+                        <option value="borrowed">借阅中</option>
+                        <option value="overdue">已逾期</option>
+                        <option value="due-today">今日到期</option>
+                        <option value="due-soon">即将到期(3天内)</option>
+                        <option value="pending-pickup">待取书</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>用户手机</label>
+                    <input type="text" id="search-phone" placeholder="输入手机号搜索">
+                </div>
+                <div class="filter-group">
+                    <label>图书名称</label>
+                    <input type="text" id="search-book" placeholder="输入书名搜索">
+                </div>
+                <button class="btn-filter" onclick="loadRecords(1)">
+                    <i class="fas fa-search"></i> 筛选
+                </button>
+                <button class="btn-reset" onclick="resetFilters()">
+                    <i class="fas fa-redo"></i> 重置
+                </button>
+            </div>
+
+            <div class="batch-action-bar" id="batch-action-bar" style="display: none;">
+                <label class="select-all">
+                    <input type="checkbox" id="select-all" onchange="toggleSelectAll(this.checked)">
+                    <span>全选当前页</span>
+                </label>
+                <span class="selected-count">已选择 <strong id="selected-count">0</strong> 项<span id="total-info"></span></span>
+                <button class="btn-select-all-filtered" id="select-all-btn" onclick="selectAllFiltered()">选择全部</button>
+                <div class="batch-actions">
+                    <button class="btn-batch btn-batch-pickup" onclick="batchConfirmPickup()">
+                        <i class="fas fa-hand-holding"></i> 批量确认取书
+                    </button>
+                    <button class="btn-batch btn-batch-return" onclick="batchConfirmReturn()">
+                        <i class="fas fa-undo"></i> 批量确认还书
+                    </button>
+                    <button class="btn-batch btn-batch-notify" onclick="showBatchNotifyModal()">
+                        <i class="fas fa-paper-plane"></i> 批量发送通知
+                    </button>
+                </div>
+            </div>
+
+            <div class="requests-table-container">
+                <table class="requests-table">
+                    <thead>
+                        <tr>
+                            <th class="col-checkbox">
+                                <input type="checkbox" id="select-all-header" onchange="toggleSelectAll(this.checked)">
+                            </th>
+                            <th class="col-user">用户</th>
+                            <th class="col-book">图书信息</th>
+                            <th class="col-time">借阅时间</th>
+                            <th class="col-due">到期时间</th>
+                            <th class="col-status">状态</th>
+                            <th class="col-actions">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="records-list">
+                        <tr>
+                            <td colspan="7" class="loading-cell">
+                                <i class="fas fa-spinner fa-spin"></i> 加载中...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination" id="pagination">
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modal-notify">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-paper-plane"></i> 发送通知</h3>
+                <span class="close-modal" onclick="closeModal('modal-notify')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="notify-target-info" id="notify-target-info"></div>
+                
+                <div class="form-group">
+                    <label>通知模板</label>
+                    <div class="template-buttons">
+                        <button class="template-btn" onclick="selectTemplate('due_reminder')">
+                            <i class="fas fa-clock"></i> 还书提醒
+                        </button>
+                        <button class="template-btn" onclick="selectTemplate('overdue')">
+                            <i class="fas fa-exclamation-triangle"></i> 逾期通知
+                        </button>
+                        <button class="template-btn" onclick="selectTemplate('pickup')">
+                            <i class="fas fa-hand-holding"></i> 取书通知
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>通知标题 <span class="required">*</span></label>
+                    <input type="text" id="notify-title" placeholder="请输入通知标题">
+                </div>
+                
+                <div class="form-group">
+                    <label>通知内容 <span class="required">*</span></label>
+                    <textarea id="notify-content" rows="5" placeholder="请输入通知内容，支持变量：{书名}、{到期日}、{用户名}"></textarea>
+                    <p class="form-hint">可用变量：{书名}、{到期日}、{用户名}、{借阅日期}</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-notify')">取消</button>
+                <button class="btn-confirm" onclick="sendNotification()">
+                    <i class="fas fa-paper-plane"></i> 发送通知
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-batch-notify">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-paper-plane"></i> 批量发送通知</h3>
+                <span class="close-modal" onclick="closeModal('modal-batch-notify')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p class="warning-text">已选择 <strong id="batch-notify-count">0</strong> 条借阅记录</p>
+                <p class="info-text">将向这 <strong id="batch-user-count">0</strong> 位用户发送通知</p>
+                
+                <div class="form-group">
+                    <label>通知模板</label>
+                    <div class="template-buttons">
+                        <button class="template-btn" onclick="selectBatchTemplate('due_reminder')">
+                            <i class="fas fa-clock"></i> 还书提醒
+                        </button>
+                        <button class="template-btn" onclick="selectBatchTemplate('overdue')">
+                            <i class="fas fa-exclamation-triangle"></i> 逾期通知
+                        </button>
+                        <button class="template-btn" onclick="selectBatchTemplate('pickup')">
+                            <i class="fas fa-hand-holding"></i> 取书通知
+                        </button>
+                        <button class="template-btn" onclick="selectBatchTemplate('activity')">
+                            <i class="fas fa-calendar-alt"></i> 活动邀请
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>通知标题 <span class="required">*</span></label>
+                    <input type="text" id="batch-notify-title" placeholder="请输入通知标题">
+                </div>
+                
+                <div class="form-group">
+                    <label>通知内容 <span class="required">*</span></label>
+                    <textarea id="batch-notify-content" rows="5" placeholder="请输入通知内容，支持变量：{书名}、{到期日}、{用户名}"></textarea>
+                    <p class="form-hint">批量发送时，变量会自动替换为各用户对应的信息</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-batch-notify')">取消</button>
+                <button class="btn-confirm" onclick="sendBatchNotification()">
+                    <i class="fas fa-paper-plane"></i> 批量发送
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/admin-notifications.js"></script>
+</body>
+
+</html>

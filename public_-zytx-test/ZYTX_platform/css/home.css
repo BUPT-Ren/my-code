@@ -1,0 +1,278 @@
+/* 主内容区域 */
+.main-content {
+    margin-left: 0;
+    padding: 2rem;
+}
+
+.welcome-section {
+    margin-bottom: 2rem;
+}
+
+.welcome-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.date-text {
+    color: var(--text-secondary);
+}
+
+/* 搜索区域 */
+.search-section {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.search-box {
+    display: flex;
+    margin-bottom: 1.5rem;
+}
+
+.search-input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: 2px solid var(--light-gray);
+    border-radius: 8px 0 0 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: var(--transition);
+}
+
+.search-input:focus {
+    border-color: var(--accent-blue);
+}
+
+.search-btn {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 0 1.5rem;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: var(--transition);
+}
+
+.search-btn:hover {
+    background: var(--secondary-blue);
+}
+
+.filter-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 180px;
+}
+
+.filter-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid var(--light-gray);
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+}
+
+/* 书籍列表 */
+.books-section {
+    margin-bottom: 2rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.view-all {
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.books-grid {
+    display: grid;
+    /* 强制一行 4 列，1fr 表示平均分配剩余空间 */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    /* 卡片间距 */
+    width: 100%;
+}
+
+.book-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.book-cover {
+    height: 200px;
+    /* 固定高度 */
+    width: 100%;
+    overflow: hidden;
+}
+
+.book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* 确保图片填满且不变形 */
+    transition: transform 0.3s ease;
+}
+
+.book-card:hover .book-cover img {
+    transform: scale(1.05);
+}
+
+.book-details {
+    padding: 1.5rem;
+}
+
+.book-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--primary-blue);
+}
+
+.book-meta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.book-description {
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.book-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.book-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.status-available {
+    background: rgba(56, 161, 105, 0.15);
+    color: var(--success-green);
+}
+
+.status-borrowed {
+    background: rgba(229, 62, 62, 0.15);
+    color: var(--error-red);
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-borrow {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+}
+
+.btn-borrow:hover {
+    background: var(--secondary-blue);
+}
+
+/*  未收藏状态（默认）：蓝底白字 */
+.btn-favorite {
+    background: var(--accent-blue);
+    color: white;
+    border: 1px solid var(--accent-blue);
+    transition: all 0.3s ease;
+}
+
+.btn-favorite:hover {
+    background: var(--secondary-blue);
+    border-color: var(--secondary-blue);
+}
+.btn-favorite i {
+    color: white;
+    /* 确保图标也是白色 */
+}
+
+/*已收藏状态：白底黑字，禁止点击 */
+.btn-favorite.is-favorited {
+    background: white;
+    color: var(--text-primary); /* 黑灰色 */
+    border: 1px solid var(--light-gray);
+    cursor: default; /* 鼠标样式变为默认，暗示不可点 */
+    opacity: 0.8;
+}
+
+.btn-favorite.is-favorited:hover {
+    background: white; /* 悬停不改变背景 */
+    color: var(--text-primary);
+}
+
+.btn-favorite.is-favorited i {
+    color: var(--accent-blue); /* 已收藏的爱心图标可以是蓝色或红色，这里设为蓝色呼应 */
+}
+
+/* 响应式保护：虽然要求一行4个，但在极小屏幕（如手机）强制4个会没法看
+   建议在平板尺寸以下（<1024px）才切换为少于4列，保证桌面端体验符合要求 */
+@media (max-width: 1024px) {
+    .books-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .books-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .books-grid {
+        grid-template-columns: 1fr;
+    }
+}

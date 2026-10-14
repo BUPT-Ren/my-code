@@ -1,0 +1,53 @@
+<!-- 用户信息区域 -->
+<view class="user-card">
+  <!-- 头像（微信选择+适配） -->
+  <button 
+    class="avatar-btn" 
+    open-type="chooseAvatar" 
+    bindchooseavatar="onChooseAvatar"
+  >
+    <image class="user-avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+  </button>
+  
+  <!-- 用户名（可点击修改） -->
+  <view class="user-name" bindtap="openNameDialog">{{userName}}</view>
+  
+  <!-- 统计数据 -->
+  <view class="user-stats">
+    <view class="stat-item">
+      <view class="stat-num">16</view>
+      <view class="stat-text">已报名</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-num">20</view>
+      <view class="stat-text">已完成</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-num">82</view>
+      <view class="stat-text">动态</view>
+    </view>
+  </view>
+</view>
+
+<!-- 我的活动区域-->
+<!-- 标题栏（含蓝色“更多”） -->
+<view class="page-title">
+  我的活动
+  <text class="more">更多</text>
+</view>
+
+<!-- 我的活动 -->
+<view class="my-activity">
+  
+  <view class="activity-item">
+  <!-- 活动图片 -->
+  <image class="item-img" src="/images/activity1.jpg"></image>
+  
+  <!-- 文字信息容器 -->
+  <view class="item-info-wrapper">
+    <view class="item-title">2021新年日程计划</view>
+    <view class="item-desc">2021新年计划，牛年大吉！</view>
+    <view class="item-count">311人已报名</view>
+  </view>
+ </view>
+</view>

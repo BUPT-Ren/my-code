@@ -1,0 +1,9 @@
+
+g_dutyState: Could not read 0x031E: execution state prevented access
+g_tFall1: Could not read 0x0320: execution state prevented access
+g_tFall2: Could not read 0x0322: execution state prevented access
+g_tFall3: Could not read 0x0324: execution state prevented access
+g_tRise: Could not read 0x0326: execution state prevented access
+g_period: Could not read 0x0328: execution state prevented access
+g_lowTime: Could not read 0x032A: execution state prevented access
+g_dutyState: Could not read 0x031E: execution state prevented access

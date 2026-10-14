@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据统计 - 智阅同行管理后台</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <span>智阅同行 · 管理后台</span>
+            </div>
+            <div class="nav-right">
+                <div class="user-profile" id="user-profile">
+                    <div class="user-avatar" id="admin-avatar">AD</div>
+                    <span id="admin-name">管理员</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="user-info">
+                            <div class="name" id="dropdown-name">管理员</div>
+                            <div class="phone" id="dropdown-phone"></div>
+                            <div class="admin-badge"><i class="fas fa-shield-alt"></i> 管理员</div>
+                        </div>
+<a href="index.html" class="dropdown-item"><i class="fas fa-home"></i><span>返回用户端</span></a>
+                         <a href="#" class="dropdown-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>退出登录</span></a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-toggle" id="sidebar-toggle"><i class="fas fa-bars"></i></div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item"><a href="admin.html" class="menu-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text">仪表盘</span></a></li>
+                <li class="menu-item"><a href="admin-requests.html" class="menu-link"><i class="fas fa-clipboard-list"></i><span class="menu-text">审核</span></a></li>
+                <li class="menu-item"><a href="admin-books.html" class="menu-link"><i class="fas fa-book"></i><span class="menu-text">图书管理</span></a></li>
+                <li class="menu-item"><a href="admin-users.html" class="menu-link"><i class="fas fa-users"></i><span class="menu-text">用户管理</span></a></li>
+                <li class="menu-item"><a href="admin-activities.html" class="menu-link"><i class="fas fa-calendar-alt"></i><span class="menu-text">活动管理</span></a></li>
+                <li class="menu-item"><a href="admin-notifications.html" class="menu-link"><i class="fas fa-bell"></i><span class="menu-text">通知管理</span></a></li>
+                <li class="menu-item"><a href="admin-stats.html" class="menu-link active"><i class="fas fa-chart-bar"></i><span class="menu-text">数据统计</span></a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content admin-main">
+            <div class="page-header">
+                <div class="header-left">
+                    <h1>数据统计</h1>
+                    <p>查看系统运营数据报表</p>
+                </div>
+                <div class="header-right">
+                    <button class="btn-export" onclick="exportAllStats()">
+                        <i class="fas fa-download"></i> 导出报表
+                    </button>
+                </div>
+            </div>
+
+            <!-- 数据概览卡片 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="stat-total-books">-</h3>
+                        <p>总藏书量</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="stat-total-users">-</h3>
+                        <p>注册用户</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="stat-total-borrows">-</h3>
+                        <p>总借阅次数</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="stat-today-borrows">-</h3>
+                        <p>今日借阅</p>
+                    </div>
+                    <span class="stat-trend" id="stat-pending-requests" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i> <span>0</span> 待审核
+                    </span>
+                </div>
+            </div>
+
+            <!-- 图表区域 - 第一行 -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-chart-line"></i> 借阅趋势</h3>
+                        <div class="chart-tabs">
+                            <button class="chart-tab active" onclick="switchTrendDays(7)">近7天</button>
+                            <button class="chart-tab" onclick="switchTrendDays(30)">近30天</button>
+                        </div>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="borrowTrendChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-chart-pie"></i> 图书分类占比</h3>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 图表区域 - 第二行 -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-user-plus"></i> 用户增长趋势</h3>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="userGrowthChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-clock"></i> 借阅时段分布</h3>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="borrowHourChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 排行榜区域 -->
+            <div class="ranking-row">
+                <div class="ranking-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-fire"></i> 热门图书 TOP 10</h3>
+                        <a href="admin-books.html" class="view-all">查看全部 <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                    <div class="card-body">
+                        <table class="ranking-table">
+                            <thead>
+                                <tr>
+                                    <th>排名</th>
+                                    <th>书名</th>
+                                    <th>作者</th>
+                                    <th>借阅次数</th>
+                                </tr>
+                            </thead>
+                            <tbody id="popular-books-list">
+                                <tr><td colspan="4" class="loading-cell"><i class="fas fa-spinner fa-spin"></i> 加载中...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="ranking-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-star"></i> 活跃用户 TOP 10</h3>
+                        <a href="admin-users.html" class="view-all">查看全部 <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                    <div class="card-body">
+                        <table class="ranking-table">
+                            <thead>
+                                <tr>
+                                    <th>排名</th>
+                                    <th>用户</th>
+                                    <th>学校</th>
+                                    <th>借阅次数</th>
+                                </tr>
+                            </thead>
+                            <tbody id="active-users-list">
+                                <tr><td colspan="4" class="loading-cell"><i class="fas fa-spinner fa-spin"></i> 加载中...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/admin-stats.js"></script>
+</body>
+
+</html>

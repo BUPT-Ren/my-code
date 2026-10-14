@@ -1,0 +1,356 @@
+/* pages/index/index.wxss */
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F5F8FA 0%, #EDF2F7 100%);
+  padding-bottom: 40rpx;
+}
+
+/* 搜索区域 */
+.search-area {
+  padding: 24rpx 32rpx 16rpx;
+  background: linear-gradient(180deg, #F5F8FA 0%, #F5F8FA 100%);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border-radius: 50rpx;
+  padding: 16rpx 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(91, 141, 239, 0.1);
+  border: 2rpx solid transparent;
+  transition: all 0.3s ease;
+}
+
+.search-box:focus-within {
+  border-color: #5B8DEF;
+}
+
+.search-icon-text {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #2D2D2D;
+}
+
+.search-placeholder {
+  color: #9B9B9B;
+}
+
+.search-clear {
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #E8EEF5;
+  border-radius: 50%;
+  color: #6B6B6B;
+  font-size: 28rpx;
+  margin-left: 16rpx;
+}
+
+/* 分类标签 */
+.category-scroll {
+  margin-bottom: 16rpx;
+}
+
+.category-list {
+  display: flex;
+  padding: 0 32rpx;
+  gap: 16rpx;
+}
+
+.category-item {
+  padding: 12rpx 28rpx;
+  font-size: 26rpx;
+  color: #6B6B6B;
+  background: #FFFFFF;
+  border-radius: 30rpx;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  border: 2rpx solid transparent;
+}
+
+.category-item.active {
+  background: #5B8DEF;
+  color: #FFFFFF;
+  box-shadow: 0 4rpx 12rpx rgba(91, 141, 239, 0.3);
+}
+
+/* 轮播图 */
+.banner-swiper {
+  margin: 24rpx 32rpx;
+  height: 220rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.banner-item {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #5B8DEF 0%, #7BA3F5 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.banner-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.banner-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 12rpx;
+  letter-spacing: 4rpx;
+}
+
+.banner-desc {
+  display: block;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.banner-decoration {
+  position: absolute;
+  right: -60rpx;
+  top: -60rpx;
+  width: 240rpx;
+  height: 240rpx;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.banner-decoration::after {
+  content: '';
+  position: absolute;
+  right: 40rpx;
+  bottom: 40rpx;
+  width: 120rpx;
+  height: 120rpx;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+}
+
+/* 区域标题 */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 32rpx 16rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2D2D2D;
+  position: relative;
+  padding-left: 20rpx;
+}
+
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6rpx;
+  height: 32rpx;
+  background: linear-gradient(180deg, #5BCCF4 0%, #5B8DEF 100%);
+  border-radius: 3rpx;
+}
+
+.section-more {
+  display: flex;
+  align-items: center;
+  color: #5B8DEF;
+  font-size: 24rpx;
+}
+
+.section-more .arrow {
+  font-size: 32rpx;
+  margin-left: 4rpx;
+}
+
+/* 图书网格 */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24rpx;
+  padding: 0 32rpx;
+}
+
+.book-card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(91, 141, 239, 0.08);
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.book-card:active {
+  transform: scale(0.98);
+}
+
+.book-cover-wrap {
+  position: relative;
+  width: 100%;
+  height: 260rpx;
+  background: linear-gradient(135deg, #EDF2F7 0%, #E8EEF5 100%);
+}
+
+.book-cover-color {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover-emoji {
+  font-size: 80rpx;
+}
+
+.book-available {
+  position: absolute;
+  top: 12rpx;
+  left: 12rpx;
+  background: linear-gradient(135deg, #5BDA95 0%, #6BE5A5 100%);
+  color: #FFFFFF;
+  padding: 6rpx 14rpx;
+  border-radius: 8rpx;
+  font-size: 20rpx;
+  font-weight: 500;
+}
+
+.book-unavailable {
+  position: absolute;
+  top: 12rpx;
+  left: 12rpx;
+  background: linear-gradient(135deg, #FFB55B 0%, #FFC56B 100%);
+  color: #FFFFFF;
+  padding: 6rpx 14rpx;
+  border-radius: 8rpx;
+  font-size: 20rpx;
+  font-weight: 500;
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  width: 52rpx;
+  height: 52rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.favorite-btn.favorited .heart-icon {
+  color: #5BCCF4;
+  animation: pulse 0.3s ease;
+}
+
+.heart-icon {
+  font-size: 28rpx;
+  color: #9B9B9B;
+}
+
+.book-info {
+  padding: 16rpx;
+}
+
+.book-title {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #2D2D2D;
+  margin-bottom: 6rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-author {
+  display: block;
+  font-size: 22rpx;
+  color: #6B6B6B;
+  margin-bottom: 10rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.book-rating {
+  display: flex;
+  align-items: center;
+  font-size: 22rpx;
+  color: #FFB55B;
+}
+
+.book-rating .star {
+  margin-right: 4rpx;
+}
+
+.book-category {
+  font-size: 20rpx;
+  padding: 4rpx 10rpx;
+  background: rgba(91, 141, 239, 0.1);
+  color: #5B8DEF;
+  border-radius: 6rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  color: #6B6B6B;
+  font-size: 28rpx;
+  margin-bottom: 32rpx;
+}
+
+.empty-action {
+  padding: 16rpx 40rpx;
+  background: #5B8DEF;
+  color: #FFFFFF;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册 - 智阅同行</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="logo">
+            <i class="fas fa-book-open"></i> 智阅同行
+        </div>
+        <div class="nav-right">
+            <a href="index.html" class="nav-icon"><i class="fas fa-home"></i></a>
+        </div>
+    </nav>
+
+    <main class="auth-container">
+        <div class="auth-card">
+            <h2>注册新账号</h2>
+            <p class="subtitle">完善信息以开始使用</p>
+
+            <form id="register-form">
+                <div class="user-type-group">
+                    <label class="user-type-label">账号类型</label>
+                    <div class="user-type-options">
+                        <label class="user-type-option">
+                            <input type="radio" name="user-type" value="user" checked>
+                            <span class="option-box">
+                                <i class="fas fa-user"></i>
+                                <span>普通用户</span>
+                            </span>
+                        </label>
+                        <label class="user-type-option">
+                            <input type="radio" name="user-type" value="admin">
+                            <span class="option-box">
+                                <i class="fas fa-user-shield"></i>
+                                <span>管理员</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="register-identifier">手机号 <span class="required">*</span></label>
+                    <input type="text" id="register-identifier" placeholder="请输入手机号" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="register-password">密码 <span class="required">*</span></label>
+                    <input type="password" id="register-password" placeholder="请输入密码（至少6位）" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="register-confirm">确认密码 <span class="required">*</span></label>
+                    <input type="password" id="register-confirm" placeholder="请再次输入密码" required>
+                </div>
+
+                <div class="input-group admin-field" id="admin-key-group" style="display: none;">
+                    <label for="admin-key">管理员密钥 <span class="required">*</span></label>
+                    <input type="password" id="admin-key" placeholder="请输入管理员密钥">
+                    <small class="field-hint">管理员密钥由系统管理员提供</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="register-birthday">生日</label>
+                    <input type="date" id="register-birthday">
+                </div>
+
+                <div class="input-group">
+                    <label for="register-school">学校</label>
+                    <input type="text" id="register-school" placeholder="请输入学校">
+                </div>
+
+                <div class="input-group">
+                    <label for="register-hobbies">阅读偏好</label>
+                    <input type="text" id="register-hobbies" placeholder="如：科幻、历史、文学">
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="agree" required>
+                    <label for="agree">我已阅读并同意 <a href="#">用户协议</a> 和 <a href="#">隐私政策</a></label>
+                </div>
+
+                <button type="submit" class="btn-primary" id="register-btn">注册</button>
+
+                <p class="switch-link">已有账号？ <a href="login.html">立即登录</a></p>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/auth.js"></script>
+</body>
+
+</html>

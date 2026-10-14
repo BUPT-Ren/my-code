@@ -1,0 +1,566 @@
+/* AI推荐页面样式 - 左右布局 */
+
+.recommend-main {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    height: calc(100vh - 80px);
+    overflow: hidden;
+}
+
+/* ========== 左侧：AI 对话区域 ========== */
+.ai-chat-section {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    min-width: 0;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.chat-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.chat-title i {
+    font-size: 1.2rem;
+}
+
+.clear-chat-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.clear-chat-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 聊天消息区 */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.message {
+    display: flex;
+    gap: 0.8rem;
+    max-width: 85%;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.message.assistant .message-avatar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.message.user .message-avatar {
+    background: var(--accent-blue);
+    color: white;
+    font-weight: 600;
+}
+
+.message-content {
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+.message.assistant .message-content {
+    background: #f0f2f5;
+    color: var(--text-primary);
+    border-bottom-left-radius: 4px;
+}
+
+.message.user .message-content {
+    background: var(--accent-blue);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.message-content p {
+    margin: 0 0 0.5rem 0;
+}
+
+.message-content p:last-child {
+    margin-bottom: 0;
+}
+
+.message-content ul {
+    margin: 0.5rem 0;
+    padding-left: 1.2rem;
+}
+
+.message-content li {
+    margin: 0.3rem 0;
+}
+
+/* 打字指示器 */
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 0.8rem 1rem;
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-secondary);
+    animation: typing 1.4s infinite both;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+    30% {
+        transform: translateY(-4px);
+        opacity: 1;
+    }
+}
+
+/* 输入区域 */
+.chat-input-area {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    background: #fafafa;
+}
+
+.chat-input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+}
+
+#chat-input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#chat-input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(74, 134, 232, 0.1);
+}
+
+.send-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.send-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.send-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* 快捷操作 */
+.quick-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.quick-btn {
+    background: white;
+    border: 1px solid var(--border-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.quick-btn:hover {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    background: rgba(74, 134, 232, 0.05);
+}
+
+/* ========== 右侧：推荐书籍区域 ========== */
+.recommend-books-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    min-width: 280px;
+    max-width: 380px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.section-header h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.section-header h2 i {
+    color: var(--accent-blue);
+}
+
+.refresh-btn {
+    background: var(--bg-secondary);
+    border: none;
+    padding: 0.4rem 0.7rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.refresh-btn:hover {
+    background: var(--accent-blue);
+    color: white;
+}
+
+.refresh-btn.loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 书籍列表 */
+.books-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.books-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 200px;
+    color: var(--text-secondary);
+}
+
+.books-loading i {
+    font-size: 1.5rem;
+    color: var(--accent-blue);
+}
+
+/* 推荐书籍卡片 - 紧凑版 */
+.recommend-book-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.recommend-book-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.book-header {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.book-cover-small {
+    width: 60px;
+    height: 85px;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.book-cover-small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.book-info-compact {
+    flex: 1;
+    min-width: 0;
+}
+
+.book-info-compact h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.2rem 0;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.book-info-compact .author {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.3rem;
+}
+
+.book-info-compact .genre-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    color: var(--accent-blue);
+    background: rgba(74, 134, 232, 0.1);
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+}
+
+.book-reason {
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px dashed var(--border-color);
+}
+
+.book-reason-label {
+    font-size: 0.7rem;
+    color: var(--accent-blue);
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+}
+
+.book-reason-text {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.book-actions-compact {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+}
+
+.book-actions-compact .action-btn {
+    flex: 1;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.7rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+}
+
+.book-actions-compact .btn-borrow {
+    background: var(--accent-blue);
+    color: white;
+}
+
+.book-actions-compact .btn-borrow:hover {
+    background: #3a76d8;
+}
+
+.book-actions-compact .btn-borrow:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.book-actions-compact .btn-favorite {
+    background: white;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.book-actions-compact .btn-favorite:hover {
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+
+.book-actions-compact .btn-favorite.is-favorited {
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+
+/* 无推荐提示 */
+.no-recommendations {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+.no-recommendations i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #ccc;
+}
+
+/* 滚动条样式 */
+.chat-messages::-webkit-scrollbar,
+.books-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.chat-messages::-webkit-scrollbar-track,
+.books-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb,
+.books-list::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover,
+.books-list::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
+}
+
+/* 响应式 */
+@media (max-width: 900px) {
+    .recommend-main {
+        flex-direction: column;
+        height: auto;
+        min-height: calc(100vh - 80px);
+    }
+    
+    .ai-chat-section {
+        flex: none;
+        height: 50vh;
+        min-height: 400px;
+    }
+    
+    .recommend-books-section {
+        flex: none;
+        max-width: none;
+        min-width: auto;
+        height: auto;
+    }
+    
+    .books-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .recommend-book-card {
+        flex: 1;
+        min-width: 250px;
+        max-width: calc(50% - 0.4rem);
+    }
+}
+
+@media (max-width: 600px) {
+    .recommend-main {
+        padding: 1rem;
+    }
+    
+    .recommend-book-card {
+        max-width: 100%;
+    }
+    
+    .message {
+        max-width: 95%;
+    }
+    
+    .quick-actions {
+        justify-content: center;
+    }
+}

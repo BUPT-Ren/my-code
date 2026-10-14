@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动管理 - 智阅同行管理后台</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/activities.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <span>智阅同行 · 管理后台</span>
+            </div>
+<div class="nav-right">
+                <a href="settings.html" class="nav-icon">
+                    <i class="fas fa-cog"></i>
+                </a>
+                <div class="user-profile" id="user-profile">
+                    <div class="user-avatar" id="admin-avatar">AD</div>
+                    <span id="admin-name">管理员</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="user-info">
+                            <div class="name" id="dropdown-name">管理员</div>
+                            <div class="phone" id="dropdown-phone"></div>
+                            <div class="admin-badge"><i class="fas fa-shield-alt"></i> 管理员</div>
+                        </div>
+                        <a href="index.html" class="dropdown-item">
+                            <i class="fas fa-home"></i>
+                            <span>返回用户端</span>
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>退出登录</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="admin.html" class="menu-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span class="menu-text">仪表盘</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="admin-requests.html" class="menu-link">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span class="menu-text">审核</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="admin-books.html" class="menu-link">
+                        <i class="fas fa-book"></i>
+                        <span class="menu-text">图书管理</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="admin-users.html" class="menu-link">
+                        <i class="fas fa-users"></i>
+                        <span class="menu-text">用户管理</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="admin-activities.html" class="menu-link active">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="menu-text">活动管理</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="admin-notifications.html" class="menu-link">
+                        <i class="fas fa-bell"></i>
+                        <span class="menu-text">通知管理</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="admin-stats.html" class="menu-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span class="menu-text">数据统计</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content admin-main">
+            <div class="page-header">
+                <div class="header-left">
+                    <h1>活动管理</h1>
+                    <p>创建、编辑和管理图书馆活动</p>
+                </div>
+                <div class="header-right">
+                    <button class="btn-add" onclick="showCreateModal()">
+                        <i class="fas fa-plus"></i> 创建活动
+                    </button>
+                </div>
+            </div>
+
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label>活动状态</label>
+                    <select id="filter-status">
+                        <option value="">全部状态</option>
+                        <option value="draft">草稿</option>
+                        <option value="published">已发布</option>
+                        <option value="ongoing">进行中</option>
+                        <option value="ended">已结束</option>
+                    </select>
+                </div>
+                <button class="btn-filter" onclick="loadActivities()">
+                    <i class="fas fa-search"></i> 筛选
+                </button>
+                <button class="btn-reset" onclick="resetFilters()">
+                    <i class="fas fa-redo"></i> 重置
+                </button>
+            </div>
+
+            <div class="activities-grid" id="activities-list">
+                <div class="loading-placeholder">
+                    <i class="fas fa-spinner fa-spin"></i> 加载中...
+                </div>
+            </div>
+
+            <div class="pagination" id="pagination"></div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modal-activity">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3 id="modal-title"><i class="fas fa-calendar-plus"></i> 创建活动</h3>
+                <span class="close-modal" onclick="closeModal('modal-activity')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="activity-form">
+                    <input type="hidden" id="activity-id">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>活动标题 <span class="required">*</span></label>
+                            <input type="text" id="activity-title" placeholder="请输入活动标题" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label>开始时间 <span class="required">*</span></label>
+                            <input type="datetime-local" id="activity-start-time" required>
+                        </div>
+                        <div class="form-group half">
+                            <label>结束时间 <span class="required">*</span></label>
+                            <input type="datetime-local" id="activity-end-time" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label>报名开始时间 <span class="required">*</span></label>
+                            <input type="datetime-local" id="registration-start-time" required>
+                        </div>
+                        <div class="form-group half">
+                            <label>报名结束时间 <span class="required">*</span></label>
+                            <input type="datetime-local" id="registration-end-time" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label>活动地点</label>
+                            <input type="text" id="activity-location" placeholder="请输入活动地点">
+                        </div>
+                        <div class="form-group half">
+                            <label>最大人数</label>
+                            <input type="number" id="activity-max-participants" placeholder="0表示不限制" min="0">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>活动封面</label>
+                        <div class="image-upload-area">
+                            <input type="file" id="cover-upload" accept="image/*" onchange="uploadCover(this)">
+                            <div class="upload-preview" id="cover-preview">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>点击上传封面图片</span>
+                            </div>
+                            <input type="hidden" id="activity-cover" value="">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>活动描述</label>
+                        <textarea id="activity-description" rows="4" placeholder="请输入活动描述..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>活动详情图片</label>
+                        <div class="multi-image-upload">
+                            <input type="file" id="content-images-upload" accept="image/*" multiple onchange="uploadContentImages(this)">
+                            <div class="images-preview" id="content-images-preview">
+                                <div class="add-image-btn">
+                                    <i class="fas fa-plus"></i>
+                                    <span>添加图片</span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="activity-content-images" value="[]">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-activity')">取消</button>
+                <button class="btn-secondary" id="btn-save-draft" onclick="saveActivity('draft')">保存草稿</button>
+                <button class="btn-confirm" id="btn-publish" onclick="saveActivity('published')">
+                    <i class="fas fa-paper-plane"></i> 发布活动
+                </button>
+                <button class="btn-confirm" id="btn-save-changes" onclick="saveChanges()" style="display: none;">
+                    <i class="fas fa-save"></i> 保存修改
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-registrations">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-users"></i> 报名管理</h3>
+                <span class="close-modal" onclick="closeModal('modal-registrations')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="registrations-header">
+                    <span id="activity-title-display"></span>
+                    <div class="registration-stats">
+                        <span class="registration-count">已通过: <strong id="approved-count">0</strong> 人</span>
+                        <span class="registration-count">已签到: <strong id="checked-in-count">0</strong> 人</span>
+                    </div>
+                </div>
+                <div class="filter-bar inline">
+                    <select id="reg-filter-status" onchange="loadRegistrations()">
+                        <option value="">全部状态</option>
+                        <option value="pending">待审核</option>
+                        <option value="approved">已通过</option>
+                        <option value="rejected">已拒绝</option>
+                        <option value="checked-in">已签到</option>
+                        <option value="not-checked-in">未签到</option>
+                    </select>
+                    <button class="btn-filter" onclick="showAddUserModal()" style="background: #28a745; margin-left: 10px;">
+                        <i class="fas fa-user-plus"></i> 批量添加
+                    </button>
+                    <button class="btn-filter" id="btn-export-participants" onclick="exportParticipants()" style="background: #17a2b8; margin-left: 5px;">
+                        <i class="fas fa-download"></i> 导出名单
+                    </button>
+                </div>
+                <div class="batch-action-bar" id="reg-batch-bar" style="display: none; margin-bottom: 10px;">
+                    <label class="select-all">
+                        <input type="checkbox" id="reg-select-all" onchange="toggleRegSelectAll(this.checked)">
+                        <span>全选</span>
+                    </label>
+                    <span class="selected-count">已选择 <strong id="reg-selected-count">0</strong> 人</span>
+                    <button class="btn-batch btn-batch-approve" onclick="batchCheckIn()">
+                        <i class="fas fa-check-circle"></i> 批量签到
+                    </button>
+                </div>
+                <div class="registrations-list" id="registrations-list">
+                    <div class="loading-placeholder">加载中...</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-registrations')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-add-users">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> 批量添加用户报名</h3>
+                <span class="close-modal" onclick="closeModal('modal-add-users')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="filter-bar inline" style="margin-bottom: 15px;">
+                    <select id="add-user-type" onchange="loadUsersForAdd()" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px;">
+                        <option value="">全部用户</option>
+                        <option value="phone">手机号用户</option>
+                        <option value="education">教育号用户</option>
+                    </select>
+                    <input type="text" id="add-user-search" placeholder="搜索账号或学校..." style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; width: 200px; margin-left: 10px;">
+                    <button class="btn-filter" onclick="searchUsersForAdd()">
+                        <i class="fas fa-search"></i> 搜索
+                    </button>
+                </div>
+                <div class="batch-action-bar" id="batch-add-bar" style="display: none; margin-bottom: 10px;">
+                    <span class="selected-count">已选择 <strong id="add-selected-count">0</strong> 人</span>
+                    <button class="btn-batch btn-batch-approve" onclick="confirmBatchAdd()">
+                        <i class="fas fa-check"></i> 确认添加
+                    </button>
+                </div>
+                <div class="users-select-list" id="users-select-list" style="max-height: 400px; overflow-y: auto;">
+                    <div class="loading-placeholder">加载中...</div>
+                </div>
+                <div id="batch-add-result" style="margin-top: 15px; display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-add-users')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-summary">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-alt"></i> 发布活动总结</h3>
+                <span class="close-modal" onclick="closeModal('modal-summary')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="summary-activity-id">
+                <div class="form-group">
+                    <label>总结内容 <span class="required">*</span></label>
+                    <textarea id="summary-content" rows="6" placeholder="请输入活动总结..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>活动图片</label>
+                    <div class="multi-image-upload">
+                        <input type="file" id="summary-images-upload" accept="image/*" multiple onchange="uploadSummaryImages(this)">
+                        <div class="images-preview" id="summary-images-preview">
+                            <div class="add-image-btn">
+                                <i class="fas fa-plus"></i>
+                                <span>添加图片</span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="summary-images" value="[]">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-summary')">取消</button>
+                <button class="btn-confirm" onclick="submitSummary()">
+                    <i class="fas fa-paper-plane"></i> 发布总结
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-view">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-eye"></i> 活动详情</h3>
+                <span class="close-modal" onclick="closeModal('modal-view')">&times;</span>
+            </div>
+            <div class="modal-body" id="activity-view-content">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-view')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/admin-activities.js"></script>
+</body>
+
+</html>

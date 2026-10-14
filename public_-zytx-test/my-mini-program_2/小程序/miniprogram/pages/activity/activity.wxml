@@ -1,0 +1,6 @@
+<view class="container">
+  <view class="page-title">活动中心</view>
+  <view class="content">
+    这里是活动页面，展示最新活动信息！
+  </view>
+</view>

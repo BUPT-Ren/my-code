@@ -1,0 +1,118 @@
+/* 全局样式重置 */
+page {
+  background-color: #f8f8f8;
+}
+
+/* 用户信息区域 */
+.user-card {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background: #fff;
+  border-radius: 10rpx;
+  margin: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.1);
+}
+
+/* 头像按钮 */
+.avatar-btn {
+  padding: 0;
+  border: none;
+  background: transparent;
+  width: 120rpx;
+  height: 120rpx;
+  margin-right: 20rpx;
+}
+
+/* 头像样式（适配大小） */
+.user-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2rpx solid #eee;
+}
+
+/* 用户名 */
+.user-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-right: 40rpx;
+  color: #333;
+}
+.user-name:active {
+  color: #007aff;
+}
+
+/* 统计数据 */
+.user-stats {
+  display: flex;
+  flex: 1;
+  justify-content: space-around;
+}
+.stat-item {
+  text-align: center;
+}
+.stat-num {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+.stat-text {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 10rpx;
+}
+
+/* 活动项容器：横向排列+垂直居中 */
+.activity-item {
+  display: flex;
+  align-items: center;
+  padding: 15rpx 0; /* 上下内边距，增加呼吸感 */
+  gap: 20rpx; /* 图片与文字的间距（比margin更简洁） */
+}
+
+/* 图片：固定尺寸+圆角+适配 */
+.item-img {
+  width: 140rpx; /* 适当放大图片，更醒目 */
+  height: 140rpx;
+  border-radius: 12rpx; /* 圆角更柔和 */
+  object-fit: cover; /* 防止图片变形 */
+}
+
+/* 文字容器：占满剩余空间 */
+.item-info-wrapper {
+  flex: 1;
+}
+
+/* 标题：加粗+稍大字体，突出层级 */
+.item-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8rpx; /* 与描述的间距 */
+}
+
+/* 描述：浅灰色+适中字体 */
+.item-desc {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 6rpx; /* 与人数的间距 */
+}
+
+/* 人数：更浅的灰色+小字体，弱化次要信息 */
+.item-count {
+  font-size: 24rpx;
+  color: #999;
+}
+.my-activity-title {
+  display: flex;
+  justify-content: space-between;
+  padding: 10rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+.more {
+  margin-left: auto; 
+  font-size: 28rpx;
+  color: #007aff;
+}

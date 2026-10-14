@@ -1,0 +1,120 @@
+<view class="page">
+  <view class="type-filter">
+    <view 
+      wx:for="{{activityTypes}}" 
+      wx:key="id" 
+      class="filter-item {{activeType === item.id ? 'active' : ''}}"
+      bindtap="onTypeChange"
+      data-type="{{item.id}}"
+    >
+      {{item.name}}
+    </view>
+  </view>
+
+  <view class="activity-list">
+    <view 
+      wx:for="{{activities}}" 
+      wx:key="activity_id" 
+      class="activity-card"
+    >
+      <view class="card-header" bindtap="onViewDetail" data-id="{{item.activity_id}}">
+        <view class="card-cover">
+          <image 
+            wx:if="{{item.cover_image}}" 
+            class="cover-image" 
+            src="http://47.93.172.18{{item.cover_image}}" 
+            mode="aspectFill"
+          />
+          <view wx:else class="cover-placeholder">
+            <text class="cover-icon">📅</text>
+          </view>
+          <view class="status-badge {{item.status}}">
+            <text wx:if="{{item.status === 'published'}}">报名中</text>
+            <text wx:elif="{{item.status === 'ongoing'}}">进行中</text>
+            <text wx:else>已结束</text>
+          </view>
+        </view>
+        <view class="card-info">
+          <text class="activity-title">{{item.title}}</text>
+          <view class="activity-meta">
+            <view class="meta-item">
+              <text class="meta-icon">📍</text>
+              <text class="meta-text">{{item.location}}</text>
+            </view>
+            <view class="meta-item">
+              <text class="meta-icon">👥</text>
+              <text class="meta-text">{{item.approved_count}}/{{item.max_participants}}人</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="card-body">
+        <view class="time-info">
+          <view class="time-row">
+            <text class="time-label">活动时间</text>
+            <text class="time-value">{{item.start_time}}</text>
+          </view>
+          <view class="time-row" wx:if="{{item.registration_start_time}}">
+            <text class="time-label">报名时间</text>
+            <text class="time-value">{{item.registration_start_time}} 起</text>
+          </view>
+        </view>
+
+        <view class="card-actions">
+          <view 
+            wx:if="{{registeredStatus[item.activity_id] === 'pending'}}" 
+            class="register-btn pending"
+            bindtap="onCancelRegister"
+            data-id="{{item.activity_id}}"
+          >
+            <text>审核中</text>
+          </view>
+          <view 
+            wx:elif="{{registeredStatus[item.activity_id] === 'approved'}}" 
+            class="register-btn registered"
+            bindtap="onCancelRegister"
+            data-id="{{item.activity_id}}"
+          >
+            <text>已报名</text>
+          </view>
+          <view 
+            wx:elif="{{registeredStatus[item.activity_id] === 'rejected'}}" 
+            class="register-btn rejected"
+            bindtap="onRegister"
+            data-id="{{item.activity_id}}"
+          >
+            <text>未通过</text>
+          </view>
+          <view 
+            wx:elif="{{item.approved_count >= item.max_participants}}" 
+            class="register-btn full"
+          >
+            <text>已满员</text>
+          </view>
+          <view 
+            wx:else 
+            class="register-btn available"
+            bindtap="onRegister"
+            data-id="{{item.activity_id}}"
+          >
+            <text>立即报名</text>
+          </view>
+          
+          <view class="detail-btn" bindtap="onViewDetail" data-id="{{item.activity_id}}">
+            <text>详情</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:if="{{activities.length === 0 && !loading}}">
+    <text class="empty-icon">📅</text>
+    <text class="empty-text">暂无活动</text>
+  </view>
+  
+  <view class="loading-state" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>
