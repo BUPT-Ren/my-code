@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh"><!--使用中文作为主体语言-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>图片处理小王子</title>
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loader-container">
+            <div class="loader">
+                <div class="loader-circle"></div>
+         
+            </div>
+            <h2 class="loading-title">图片处理小王子</h2>
+            <p class="loading-subtitle">正在加载专业图像处理工具...</p>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 帮助按钮 -->
+    <button id="help-btn" class="help-btn">
+        <i>❓</i> 帮助
+    </button>
+    <div id="help-content" class="help-content">
+        <h3>图片编辑器使用帮助</h3>
+        <ul>
+            <li><strong>上传图片</strong>：点击"选择文件"按钮</li>
+            <li><strong>旋转图片</strong>：使用旋转按钮</li>
+            <li><strong>缩放图片</strong>：使用放大/缩小按钮</li>
+            <li><strong>添加边框</strong>：点击"添加边框"按钮</li>
+            <li><strong>添加文字</strong>：输入文字后点击"添加文字"</li>
+            <li><strong>拖动文字</strong>：添加文字后可以拖动文字到任意位置</li>
+            <li><strong>保存背景颜色</strong>：点击"保存背景颜色"一旁的调色板选择颜色，然后点击按钮应用</li>
+            <li><strong>下载图片</strong>：点击"下载图片"按钮以下载图片，您还可以选择不同格式下载</li>
+            <li><strong>添加滤镜</strong>：点击"滤镜选择框"选择不同滤镜，并且可以在弹出的滑动条调整效果</li>
+            <li><strong>显示图片信息</strong>：点击"显示图片信息"可以查询图片参数</li>
+            <li><strong>水平镜像</strong>：点击"水平镜像"可以实现水平镜像</li>
+            <li><strong>垂直镜像</strong>：点击"垂直镜像"可以实现垂直镜像</li>
+            <li><strong>添加水印</strong>：点击"添加水印"可以把一张图片作为水印添加到当前操作的图片</li>
+        </ul>
+    </div>
+
+    <!-- 图片切换器 -->
+    <div id="image-switcher" class="image-switcher"></div>
+
+    <div id="controls-section">
+        <div class="control-group">
+            <div class="control-group-title">
+                <i>📁</i> 文件操作
+            </div>
+            <div id="button-container">
+                <button id="file-input-btn" class="btn file-upload-btn">
+                    <i>📤</i> 选择图片
+                </button>
+                <input type="file" id="file-input" accept="image/*" multiple />
+                <button id="download" class="btn">
+                    <i>💾</i> 下载图片
+                </button>
+                <select id="save-format" class="btn btn-secondary">
+                    <option value="png">PNG格式</option>
+                    <option value="jpeg">JPG格式</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="control-group-title">
+                <i>🔄</i> 基本调整
+            </div>
+            <div id="button-container">
+                <button id="rotate" class="btn">
+                    <i>🔄</i> 旋转
+                </button>
+                <input type="number" id="rotate-angle" placeholder="角度" min="0" max="360" class="btn btn-secondary">
+                <button id="zoom-in" class="btn">
+                    <i>🔍</i> 放大
+                </button>
+                <button id="zoom-out" class="btn">
+                    <i>🔎</i> 缩小
+                </button>
+                <button id="mirror-horizontal" class="btn">
+                    <i>🪞</i> 水平镜像
+                </button>
+                <button id="mirror-vertical" class="btn">
+                    <i>🪞</i> 垂直镜像
+                </button>
+                <button id="crop" class="btn">
+                    <i>✂️</i> 裁剪
+                </button>
+                <div class="input-group">
+                    <label for="opacity">透明度:</label>
+                    <input type="range" id="opacity" min="0" max="1" step="0.01" value="1">
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="control-group-title">
+                <i>🎨</i> 视觉效果
+            </div>
+            <div id="button-container">
+                <button id="add-border" class="btn">
+                    <i>🖼️</i> 添加边框
+                </button>
+                <button id="add-watermark" class="btn">
+                    <i>💧</i> 添加水印
+                </button>
+                <div class="input-group">
+                    <label for="bg-color">背景颜色:</label>
+                    <input type="color" id="bg-color" value="#ffffff">
+                </div>
+                <select id="filter" class="btn btn-secondary">
+                    <option value="none">无滤镜</option>
+                    <option value="grayscale">灰度</option>
+                    <option value="invert">反色</option>
+                    <option value="blur">模糊</option>
+                    <option value="brightness">亮度</option>
+                    <option value="contrast">对比度</option>
+                    <option value="saturate">饱和度</option>
+                    <option value="sharpen">锐化</option>
+                </select>
+            </div>
+
+            <div id="filter-controls">
+                <div class="filter-control">
+                    <label for="brightness-slider">亮度: <span id="brightness-value">100</span>%</label>
+                    <input type="range" id="brightness-slider" min="0" max="200" value="100">
+                </div>
+                <div class="filter-control">
+                    <label for="contrast-slider">对比度: <span id="contrast-value">100</span>%</label>
+                    <input type="range" id="contrast-slider" min="0" max="200" value="100">
+                </div>
+                <div class="filter-control">
+                    <label for="saturation-slider">饱和度: <span id="saturation-value">100</span>%</label>
+                    <input type="range" id="saturation-slider" min="0" max="200" value="100">
+                </div>
+                <div class="filter-control">
+                    <label for="blur-slider">模糊: <span id="blur-value">0</span>px</label>
+                    <input type="range" id="blur-slider" min="0" max="20" value="0">
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="control-group-title">
+                <i>✏️</i> 文字工具
+            </div>
+            <div id="button-container">
+                <input type="text" id="text-input" placeholder="输入文字内容" class="btn btn-secondary">
+                <input type="color" id="text-color" value="#ff0000">
+                <select id="text-font" class="btn btn-secondary">
+                    <option value="Arial">Arial</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                </select>
+                <input type="number" id="text-size" value="20" min="10" max="100" class="btn btn-secondary" placeholder="大小">
+                <button id="add-text" class="btn">
+                    <i>🔤</i> 添加文字
+                </button>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="control-group-title">
+                <i>⏪</i> 历史记录
+            </div>
+            <div id="button-container">
+                <button id="undo" class="btn">
+                    <i>↩️</i> 撤销
+                </button>
+                <button id="redo" class="btn">
+                    <i>↪️</i> 重做
+                </button>
+                <button id="show-image-info" class="btn">
+                    <i>ℹ️</i> 图片信息
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="image-container">
+        <canvas id="image-canvas" width="800" height="600"></canvas>
+    </div>
+
+    <div id="image-info" class="info-container" style="display: none;">
+        <div class="info-box">
+            <h3><i>ℹ️</i> 图片信息</h3>
+            <div class="info-content"></div>
+            <button class="close-btn">关闭</button>
+        </div>
+    </div>
+
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        // 为文件上传按钮添加点击事件
+        document.getElementById('file-input-btn').addEventListener('click', function () {
+            document.getElementById('file-input').click();
+        });
+
+        // 实时更新滤镜参数显示
+        document.getElementById('brightness-slider').addEventListener('input', function (e) {
+            document.getElementById('brightness-value').textContent = e.target.value;
+        });
+
+        document.getElementById('contrast-slider').addEventListener('input', function (e) {
+            document.getElementById('contrast-value').textContent = e.target.value;
+        });
+
+        document.getElementById('saturation-slider').addEventListener('input', function (e) {
+            document.getElementById('saturation-value').textContent = e.target.value;
+        });
+
+        document.getElementById('blur-slider').addEventListener('input', function (e) {
+            document.getElementById('blur-value').textContent = e.target.value;
+        });
+
+        // 帮助按钮功能
+        document.getElementById('help-btn').addEventListener('click', function () {
+            document.getElementById('help-content').classList.toggle('show');
+        });
+    </script>
+</body>
+</html>
